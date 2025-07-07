@@ -1,0 +1,3 @@
+table:
+  name: nft_class_count
+  schema: public

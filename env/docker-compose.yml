@@ -1,0 +1,181 @@
+services:
+  redis:
+    image: 192.168.0.79/metaearth/redis:latest
+    deploy:
+      replicas: 1
+    #    command: >
+    #      redis-server --user rduser --requirepass rdpasswd
+    ports:
+      - "6379:6379"
+    networks:
+      - app-net
+
+  # Explorer for the gea v2.0
+  explorer:
+    image: 192.168.0.79/gea/gea-scan:v0.37.19
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 300s
+    ports:
+      - "8000:8000"
+    configs:
+      - source: scan-cfg
+        target: /data/conf/config.yaml
+      - source: scan-proxy-api
+        target: /data/conf/apis.json
+    networks:
+      - app-net
+    command: ["./scan", "--conf", "/data/conf", "--api-conf", "/data/conf"]
+
+  hasura:
+    image: 192.168.0.79/metaearth/hasura/graphql-engine:v2.42.0
+    deploy:
+      replicas: 1
+    environment:
+      # HASURA_GRAPHQL_DATABASE_URL: postgres://pguser:pgpassword@postgres:5432/gea-scan
+      HASURA_GRAPHQL_METADATA_DATABASE_URL: postgres://pguser:pgpassword@postgres:5432/gea-scan
+      HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
+      HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
+      # HASURA_GRAPHQL_ADMIN_SECRET: "hspassword"
+    ports:
+      - "8080:8080"
+    networks:
+      - app-net
+    depends_on:
+      - data-connector
+
+  # GraphQL engine, enable Hasura to access different data sources through graphql
+  data-connector:
+    image: 192.168.0.79/metaearth/hasura/graphql-data-connector:v2.42.0
+    ports:
+      - "8081:8081"
+    environment:
+      QUARKUS_LOG_LEVEL: ERROR
+      QUARKUS_OPENTELEMETRY_ENABLED: "false"
+    networks:
+      - app-net
+
+  postgres:
+    image: 192.168.0.79/metaearth/postgres:15
+    deploy:
+      replicas: 1
+    environment:
+      POSTGRES_USER: pguser # initial user
+      POSTGRES_PASSWORD: pgpassword # initial password
+      POSTGRES_DB: gea-scan # initial db
+    ports:
+      - "5432:5432"
+    volumes:
+      - type: volume
+        source: pgdata
+        target: /var/lib/postgresql/data # for data persistence
+    networks:
+      - app-net
+
+  #callisto
+  postgres_gea_hub:
+    image: 192.168.0.79/metaearth/postgres:15
+    deploy:
+      replicas: 1
+    environment:
+      POSTGRES_USER: pguser # initial user
+      POSTGRES_PASSWORD: pgpassword # initial password
+      POSTGRES_DB: callisto-gea-hub # initial db
+    ports:
+      - "5433:5432"
+    volumes:
+      - type: volume
+        source: gea-hub-db-data
+        target: /var/lib/postgresql/data # for data persistence
+    command:
+      - postgres
+      - -c
+      - work_mem=64MB
+      - -c
+      - maintenance_work_mem=1GB
+      - -c
+      - shared_buffers=12GB
+      - -c
+      - effective_cache_size=18GB
+      - -c
+      - wal_buffers=16MB
+      - -c
+      - max_connections=200
+      - -c
+      - max_locks_per_transaction=256
+      - -c
+      - max_pred_locks_per_transaction=256
+      - -c
+      - lock_timeout=10s
+      - -c
+      - deadlock_timeout=1s
+      - -c
+      - random_page_cost=1.1
+    networks:
+      - app-net
+
+  # callisto-gea-hub:
+  #   image: 192.168.0.79/gea/callisto-gea-hub:v0.48.11
+  #   deploy:
+  #     replicas: 1
+  #   networks:
+  #     - app-net
+  #   configs:
+  #     - source: gea-hub-cfg
+  #       target: /.callisto/config.yaml
+  #   depends_on:
+  #     - postgres_gea_hub
+  #   entrypoint: ["callisto", "start", "--home", "/.callisto"]
+
+  # callisto-rollapp:
+  #   image: 192.168.0.79/gea/callisto-rollapp:v0.2.1
+  #   deploy:
+  #     replicas: 1
+  #   networks:
+  #     - app-net
+  #   configs:
+  #     - source: rollapp-cfg
+  #       target: /.bdjuno/config.yaml
+  #   depends_on:
+  #     - postgres_gea_hub
+  #   entrypoint: ["bdjuno", "start", "--home", "/.bdjuno"]
+
+  # jaeger:
+  #   image: 192.168.0.79/metaearth/jaeger:2.1.0
+  #   deploy:
+  #     replicas: 1
+  #   ports:
+  #     - "16686:16686"
+  #     - "4317:4317"
+  #     - "4318:4318"
+  #     - "5778:5778"
+  #     - "9411:9411"
+  #   networks:
+  #     - app-net
+
+# Manage hot loading configs by the docker NFS volume
+volumes:
+  pgdata: # for data persistence
+  gea-hub-db-data: # for gea-hub data persistence
+  rollapp-db-data: # for rollapp data persistence
+  gea-hub-home:
+
+# Manage configs by the docker config
+configs:
+  gea-hub-cfg:
+    file: cluster-config/gea-hub-home/config.yaml
+  rollapp-cfg:
+    file: cluster-config/rollapp-home/config.yaml
+  scan-cfg:
+    file: cluster-config/scan-cfg/config.yaml
+  scan-proxy-api:
+    file: cluster-config/scan-cfg/apis.json
+
+networks:
+  app-net:
+    driver: overlay
+    attachable: true

@@ -1,0 +1,3 @@
+table:
+  name: ibc_transfer_msgs
+  schema: public

@@ -1,0 +1,3 @@
+table:
+  name: region_states_with_all_delegation
+  schema: public

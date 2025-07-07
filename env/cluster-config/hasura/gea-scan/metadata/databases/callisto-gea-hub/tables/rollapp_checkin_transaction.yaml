@@ -1,0 +1,29 @@
+table:
+  name: transaction
+  schema: rollapp_checkin
+configuration:
+  column_config: {}
+  custom_column_names: {}
+  custom_name: transaction_rollapp1
+  custom_root_fields: {}
+object_relationships:
+  - name: block
+    using:
+      manual_configuration:
+        column_mapping:
+          height: height
+        insertion_order: null
+        remote_table:
+          name: block
+          schema: rollapp_checkin
+array_relationships:
+  - name: checkin_records
+    using:
+      manual_configuration:
+        column_mapping:
+          hash: transition_hash
+          height: height
+        insertion_order: null
+        remote_table:
+          name: check_in_record
+          schema: rollapp_checkin

@@ -1,0 +1,3 @@
+table:
+  name: supply_view
+  schema: public

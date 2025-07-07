@@ -1,0 +1,41 @@
+table:
+  name: proposal
+  schema: public
+object_relationships:
+  - name: account
+    using:
+      manual_configuration:
+        remote_table:
+          name: account
+          schema: public
+        column_mapping:
+          proposer_address: address
+array_relationships:
+  - name: deposit
+    using:
+      foreign_key_constraint_on:
+        column: proposal_id
+        table:
+          name: proposal_deposit
+          schema: public
+  - name: validators
+    using:
+      foreign_key_constraint_on:
+        column: proposal_id
+        table:
+          name: proposal_validator_status_snapshot
+          schema: public
+  - name: vote_tally
+    using:
+      foreign_key_constraint_on:
+        column: proposal_id
+        table:
+          name: proposal_tally_result
+          schema: public
+  - name: votes
+    using:
+      foreign_key_constraint_on:
+        column: proposal_id
+        table:
+          name: proposal_vote
+          schema: public

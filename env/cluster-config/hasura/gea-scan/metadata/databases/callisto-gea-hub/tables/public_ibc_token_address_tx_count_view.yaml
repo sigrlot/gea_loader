@@ -1,0 +1,3 @@
+table:
+  name: ibc_token_address_tx_count_view
+  schema: public

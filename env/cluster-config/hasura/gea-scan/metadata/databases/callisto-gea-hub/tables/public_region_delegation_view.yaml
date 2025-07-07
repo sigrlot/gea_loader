@@ -1,0 +1,13 @@
+table:
+  name: region_delegation_view
+  schema: public
+object_relationships:
+  - name: region_state
+    using:
+      manual_configuration:
+        column_mapping:
+          region_id: region_id
+        insertion_order: null
+        remote_table:
+          name: region_states
+          schema: public

@@ -1,0 +1,3 @@
+table:
+  name: proposal_vote_summary_by_address_count_view
+  schema: public

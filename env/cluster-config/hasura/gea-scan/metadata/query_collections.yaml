@@ -1,0 +1,1386 @@
+- name: allowed-queries
+  definition:
+    queries:
+    - name: account.all_governance_address
+      query: |
+        query query_governance_accounts ($offset: Int = 0, $limit: Int = 10) {
+          governance_community_accounts(offset: $offset, limit: $limit) {
+            address
+            account_type
+            name
+            note
+            region_id
+            tag
+          }
+          governance_community_accounts_aggregate {
+            aggregate {
+              count
+            }
+          }
+        }
+    - name: account.delegate_amount
+      query: |
+        query delegate_amount ($address: String, $region_id: String) {
+          delegate_amount: staking_counts(where: {address:{_eq:$address},region_id:{_eq:$region_id}}) {
+            kyc_amount
+            delegation_amount
+            fixed_deposit_amount
+            lock_up_deposit_amount
+          }
+        }
+    - name: account.delegate_info
+      query: |
+        query delegate_info ($address: String) {
+          delegate_info: dids(where: {address:{_eq:$address}}) {
+            address
+            kyc_level
+            region_id
+            sub_region_id: approve_region_id
+            region_state {
+              allow_ans: region_total_stake_allow_ans
+              total_ans: region_total_ans
+            }
+            current_region_delegate {
+              kyc_amount
+              delegation_amount
+              fixed_deposit_amount
+              lock_up_deposit_amount
+            }
+            region_delegate_summary {
+              kyc_amount
+              delegation_amount
+              fixed_deposit_amount
+              lock_up_deposit_amount
+              age_ratio
+              undelegateable_amount
+            }
+            sub_region_delegate_summary {
+              kyc_amount
+              delegation_amount
+              fixed_deposit_amount
+              lock_up_deposit_amount
+            }
+          }
+        }
+    - name: account.event_of_msgs
+      query: |
+        query event_of_msgs ($address: String, $filter_type: _text, $limit: Int = 10, $offset: Int = 0) {
+          msgs: event_of_msgs_func(args: {address:$address,p_filter_type:$filter_type}, limit: $limit, offset: $offset, order_by: {height:desc,index:desc}) {
+            type
+            transaction_hash
+            timestamp
+            success
+            height
+            index
+            events
+            description
+          }
+          count: event_of_msgs_func_aggregate(args: {address:$address,p_filter_type:$filter_type}) {
+            aggregate {
+              count
+            }
+          }
+        }
+    - name: account.governance_address
+      query: |
+        query query_governance_accounts ($offset: Int = 0, $limit: Int = 10) {
+          governance_community_accounts(where: {tag:{_eq:"whole_network_governance_address"}}, offset: $offset, limit: $limit) {
+            address
+            account_type
+            name
+            tag
+          }
+          governance_community_accounts_aggregate(where: {tag:{_eq:"whole_network_governance_address"}}) {
+            aggregate {
+              count
+            }
+          }
+        }
+    - name: account.kyc_invite_rewards
+      query: |
+        query kyc_invite_rewards ($address: String!, $limit: Int = 10, $offset: Int = 0) {
+          kyc_invite_transaction: event_kyc_rewards(where: {invite_address:{_eq:$address}}, limit: $limit, offset: $offset, order_by: {height:desc}) {
+            tx_hash
+            height
+            account
+            invite_reward
+            kyc_transaction {
+              success
+            }
+            kyc_block {
+              timestamp
+            }
+          }
+          kyc_invite_transaction_aggregate: event_kyc_rewards_aggregate(where: {invite_address:{_eq:$address}}) {
+            aggregate {
+              count
+            }
+          }
+        }
+    - name: account.module_txs
+      query: |
+        query get_module_transaction_by_address ($limit: Int = 10, $offset: Int = 0, $address: String!) {
+          module_account_transfers(limit: $limit, offset: $offset, where: {invoke_address:{_contains:[$address]}}, order_by: {height:desc}) {
+            tx_hash
+            from_address
+            to_address
+            msg_index
+            invoke_address
+            height
+            has_ibc_token
+            token_types
+            amount
+            type
+            block {
+              timestamp
+            }
+            transaction {
+              success
+            }
+            tag
+          }
+          module_account_transfers_aggregate(where: {invoke_address:{_contains:[$address]}}) {
+            aggregate {
+              count
+            }
+          }
+        }
+    - name: account.system_address
+      query: |
+        query query_governance_accounts ($offset: Int = 0, $limit: Int = 10, $region_id: String = "") {
+          governance_community_accounts(where: {region_id:{_eq:$region_id},tag:{_eq:"system_address"}}, offset: $offset, limit: $limit, order_by: {address:desc}) {
+            address
+            account_type
+            name
+            region_id
+            tag
+          }
+          governance_community_accounts_aggregate(where: {region_id:{_eq:$region_id},tag:{_eq:"system_address"}}) {
+            aggregate {
+              count
+            }
+          }
+        }
+    - name: account.transfer_of_antes
+      query: |
+        query transfer_of_abci ($address: String, $limit: Int = 10, $offset: Int = 0, $start_time: timestamptz, $end_time: timestamptz) {
+          transfers: transfer_in_abci(where: {_or:[{sender:{_eq:$address}},{receiver:{_eq:$address}}],block:{timestamp:{_gte:$start_time,_lte:$end_time}}}, limit: $limit, offset: $offset, order_by: {height:desc}) {
+            height
+            sender
+            receiver
+            coins
+            trigger_by
+            tag
+          }
+          count: transfer_in_abci_aggregate(where: {_or:[{sender:{_eq:$address}},{receiver:{_eq:$address}}],block:{timestamp:{_gte:$start_time,_lte:$end_time}}}) {
+            aggregate {
+              count
+            }
+          }
+        }
+    - name: account.transfer_of_msgs
+      query: |
+        query transfer_of_msgs ($address: String, $filter_type: _text, $start_time: timestamptz, $end_time: timestamptz, $limit: Int = 10, $offset: Int = 0) {
+          msgs: transfer_of_msgs_func(args: {address:$address,p_filter_type:$filter_type,start_time:$start_time,end_time:$end_time}, limit: $limit, offset: $offset, order_by: {height:desc}) {
+            transaction_hash
+            index
+            height
+            type
+            success
+            income_ugea
+            expend_ugea
+            transfers(where: {_or:[{sender:{_eq:$address}},{receiver:{_eq:$address}}],msg_type:{_neq:"gas_fee"}}, order_by: {ugea:desc}) {
+              sender
+              receiver
+              ugea
+              coins
+            }
+            description
+            events
+            timestamp
+          }
+          count: transfer_of_msgs_func_aggregate(args: {address:$address,p_filter_type:$filter_type,start_time:$start_time,end_time:$end_time}) {
+            aggregate {
+              sum {
+                income_ugea
+                income_ugag
+                expend_ugea
+                expend_ugag
+              }
+              count
+            }
+          }
+        }
+    - name: account.transfers
+      query: |
+        query account_transfers ($offset: Int = 0, $limit: Int = 20, $address: String!) {
+          transfer_combine_view(limit: $limit, order_by: {height:desc}, offset: $offset, where: {invoke_address:{_contains:[$address]}}) {
+            height
+            tx_hash
+            type
+            from_address
+            to_address
+            amount
+          }
+          transfer_combine_view_aggregate(where: {invoke_address:{_contains:[$address]}}) {
+            aggregate {
+              count
+            }
+          }
+        }
+    - name: account.txs
+      query: |
+        query account_tx ($offset: Int = 0, $limit: Int = 10, $address: String!) {
+          transaction(limit: $limit, order_by: {height:desc}, offset: $offset, where: {msgs:{involved_accounts_addresses:{_contains:[$address]}}}) {
+            hash
+            height
+            success
+            transfer(where: {msg_type:{_neq:"gas_fee"}}) {
+              receiver
+              sender
+              coins
+              msg_type
+            }
+            gas_fee {
+              fee_amount
+              fee_denom
+            }
+            msgs(where: {involved_accounts_addresses:{_contains:[$address]}}) {
+              type
+              extra_info
+            }
+            time: block {
+              timestamp
+            }
+            transfer_amount: transfer_aggregate(where: {msg_type:{_neq:"gas_fee"},invoke_address:{_contains:[$address]}}) {
+              aggregate {
+                sum {
+                  ugag_coin_amount: ugag
+                  ugea_coin_amount: ugea
+                }
+              }
+            }
+          }
+          transaction_aggregate(where: {msgs:{involved_accounts_addresses:{_contains:[$address]}}}) {
+            total_transtion: aggregate {
+              count
+            }
+          }
+        }
+    - name: asset_change_log
+      query: |
+        query asset_change_log ($address: String!, $tx_hash: String!) {
+          asset_change_logs: asset_change_logs_view(where: {address:{_eq:$address},tx_hash:{_eq:$tx_hash}}) {
+            address
+            before_change
+            change
+            after_change
+            height
+            tx_hash
+            trigger_by
+          }
+        }
+    - name: block.average_block_time
+      query: |
+        query average_block_time {
+          average_block_time_per_hour {
+            average_time
+          }
+          block(order_by: {height:desc}, limit: 1) {
+            latest_block: height
+          }
+        }
+    - name: block.detail
+      query: |
+        query block_detail ($height: bigint! = "0", $hash: String = "") {
+          block(where: {_or:[{height:{_eq:$height}},{hash:{_eq:$hash}}]}) {
+            height
+            num_txs
+            timestamp
+            reward
+            total_gas
+            hash
+            proposer_address
+            validator_info {
+              self_delegate_address
+              consensus_address
+              operator_address
+            }
+            validator_description {
+              moniker
+            }
+            reward_allocates {
+              region_id
+              region_treasury_address
+              gag_coins
+              gea_coins
+            }
+            gas_fee {
+              fee_denom
+              total_fee
+            }
+            raw_log {
+              block
+              log
+            }
+          }
+        }
+    - name: block.list
+      query: |
+        query block_list ($limit: Int = 10, $offset: Int = 0) {
+          block(limit: $limit, offset: $offset, order_by: {height:desc}) {
+            height
+            num_txs
+            timestamp
+            reward
+            total_gas
+            hash
+            proposer_address
+            validator_info {
+              self_delegate_address
+              consensus_address
+              operator_address
+            }
+            validator_description {
+              moniker
+            }
+            gas_fee {
+              total: total_fee
+              denom: fee_denom
+            }
+          }
+          block_aggregate {
+            total_block: aggregate {
+              count
+            }
+          }
+        }
+    - name: block.module_transfers
+      query: |
+        query block_module_transfers ($height: bigint, $offset: Int = 0, $limit: Int = 10) {
+          transfers: module_account_transfers(where: {height:{_eq:$height}}, offset: $offset, limit: $limit) {
+            tx_hash
+            msg_index
+            type
+            from_address
+            to_address
+            amount
+            tag
+          }
+          count: module_account_transfers_aggregate(where: {height:{_eq:$height}}) {
+            aggregate {
+              count
+            }
+          }
+        }
+    - name: block.txs
+      query: |
+        query block_txs ($height: bigint, $offset: Int = 0, $limit: Int = 10) {
+          txs: transaction(where: {height:{_eq:$height}}, offset: $offset, limit: $limit) {
+            hash
+            success
+            msgs {
+              type
+              extra_info
+            }
+            transfer_amount: transfer_aggregate(where: {msg_type:{_neq:"gas_fee"}}) {
+              aggregate {
+                sum {
+                  ugag_coin_amount: ugag
+                  ugea_coin_amount: ugea
+                }
+              }
+            }
+            gas_fee {
+              fee_amount
+              fee_denom
+              fee_payer
+            }
+          }
+          count: transaction_aggregate(where: {height:{_eq:$height}}) {
+            aggregate {
+              count
+            }
+          }
+        }
+    - name: checkin.count
+      query: |
+        query checkin_count ($start_time: timestamptz!, $end_time: timestamptz!) {
+          all: check_in_record_aggregate {
+            aggregate {
+              count
+            }
+          }
+          filtered: check_in_record_aggregate(where: {check_in_time:{_gte:$start_time,_lt:$end_time}}) {
+            aggregate {
+              count
+            }
+          }
+        }
+    - name: checkin.count.address
+      query: |
+        query address_count ($address: String!) {
+          checkin_count: check_in_record_aggregate(where: {address:{_eq:$address}}) {
+            aggregate {
+              count
+            }
+          }
+        }
+    - name: checkin.list
+      query: |
+        query rollappCheckinList ($limit: Int = 10, $offset: Int = 0) {
+          check_in_record(limit: $limit, offset: $offset, order_by: {check_in_time:desc}) {
+            address
+            transition_hash
+            check_in_time
+            height
+            did {
+              kyc {
+                region_id
+              }
+            }
+          }
+          check_in_record_aggregate {
+            aggregate {
+              count
+            }
+          }
+        }
+    - name: checkin.record.detail
+      query: |
+        query rollapp_tx_detail ($hash: String!) {
+          transaction_rollapp1(where: {hash:{_eq:$hash}}) {
+            hash
+            height
+            fee
+            gas_used
+            gas_wanted
+            success
+            block {
+              timestamp
+            }
+            logs
+            memo
+            messages
+            raw_log
+            checkin_records {
+              address
+              check_in_time
+            }
+          }
+        }
+    - name: checkin.region.counts
+      query: |
+        query region_checkin_counts {
+          checkin_count(order_by: {check_in_count:desc}) {
+            region_id
+            all_count: check_in_count
+            today_checkin {
+              count: check_in_count
+            }
+          }
+        }
+    - name: checkin.region.txs
+      query: |
+        query checkin_list_by_region ($limit: Int = 10, $offset: Int = 0, $region_id: String = "") {
+          check_in_record(limit: $limit, offset: $offset, order_by: {check_in_time:desc}, where: {did:{kyc:{region_id:{_eq:$region_id}}}}) {
+            address
+            transition_hash
+            check_in_time
+            height
+            did {
+              kyc {
+                region_id
+              }
+            }
+          }
+          check_in_record_aggregate(where: {did:{kyc:{region_id:{_eq:$region_id}}}}) {
+            aggregate {
+              count
+            }
+          }
+        }
+    - name: committee.candidate_detail
+      query: |
+        query candidate_info_by_id ($election_id: bigint!, $address: String!) {
+          committee_candidate_infos(where: {election_id:{_eq:$election_id},candidate_address:{_eq:$address}}, order_by: {candidate_id:asc}) {
+            candidate_address
+            candidate_id
+            election_id
+            vote_amount_ugag
+            is_elected
+          }
+        }
+    - name: committee.candidate_info
+      query: |
+        query candidate_info_by_id ($limit: Int = 10, $offset: Int = 0, $election_id: bigint!) {
+          committee_candidate_infos(limit: $limit, offset: $offset, where: {election_id:{_eq:$election_id}}, order_by: {vote_amount_ugag:desc,candidate_id:asc}) {
+            candidate_address
+            candidate_id
+            election_id
+            vote_amount_ugag
+            is_elected
+          }
+          committee_candidate_infos_aggregate(where: {election_id:{_eq:$election_id}}) {
+            aggregate {
+              count
+            }
+          }
+        }
+    - name: committee.election_vote_info
+      query: |
+        query election_vote_info_by_id ($limit: Int = 10, $offset: Int = 0, $election_id: bigint!) {
+          committee_electoral_vote_infos(limit: $limit, offset: $offset, where: {election_id:{_eq:$election_id}}) {
+            candidate_id
+            election_id
+            tx_hash
+            vote_address
+            vote_receiver
+            vote_amount_ugag
+          }
+          committee_electoral_vote_infos_aggregate(where: {election_id:{_eq:$election_id}}, order_by: {candidate_id:asc}) {
+            aggregate {
+              count
+            }
+          }
+        }
+    - name: committee.proposal_vote_address_count
+      query: |
+        query proposal_vote_summary_about_address_count ($proposal_id: bigint!) {
+          proposal_vote_summary_address_count: proposal_vote_summary_by_address_count_view(where: {proposal_id:{_eq:$proposal_id}}) {
+            against_address_count
+            proposal_id
+            support_address_count
+          }
+        }
+    - name: committee.proposal_vote_info
+      query: |
+        query proposal_vote_info_by_id ($limit: Int = 10, $offset: Int = 0, $proposal_id: bigint!) {
+          committee_proposal_vote_infos(limit: $limit, offset: $offset, where: {proposal_id:{_eq:$proposal_id}}, order_by: {vote_amount_ugag:desc}) {
+            is_support
+            proposal_id
+            tx_hash
+            vote_address
+            vote_amount_ugag
+          }
+          committee_proposal_vote_infos_aggregate(where: {proposal_id:{_eq:$proposal_id}}) {
+            aggregate {
+              count
+            }
+          }
+        }
+    - name: committee.proposal_vote_result
+      query: |
+        query proposal_vote_summary_by_id ($proposal_id: bigint!) {
+          proposal_vote_result: proposal_vote_summary_by_vote_result_view(where: {proposal_id:{_eq:$proposal_id}}) {
+            is_support
+            proposal_id
+            total_vote_amount
+          }
+        }
+    - name: gov.proposal.detail
+      query: |
+        query detail ($proposal_id: Int) {
+          proposal(where: {id:{_eq:$proposal_id}}) {
+            id
+            title
+            type: content(path: "$.[0].[\"@type\"]")
+            version: content(path: "$.[0].content.plan.info")
+            status
+            height: content(path: "$.[0].content.plan.height")
+            uri
+            description
+            proposer_address
+            submit_time
+            voting_start_time
+            voting_end_time
+            deposit(limit: 1, order_by: {timestamp:asc}) {
+              tx_hash: transaction_hash
+            }
+            vote_tally {
+              yes
+              no
+              no_with_veto
+              abstain
+            }
+          }
+        }
+    - name: gov.proposal.list
+      query: |
+        query proposals ($limit: Int = 10, $offset: Int = 0) {
+          proposal(limit: $limit, offset: $offset, order_by: {id:desc}) {
+            id
+            title
+            type: content(path: "$.[0].[\"@type\"]")
+            status
+            submit_time
+          }
+          counts: proposal_aggregate {
+            aggregate {
+              count
+            }
+          }
+        }
+    - name: gov.proposal.vote-counts
+      query: |
+        query vote_counts ($proposal_id: Int) {
+          proposal(where: {id:{_eq:$proposal_id}}) {
+            vote_weights: vote_tally {
+              yes
+              no
+              no_with_veto
+              abstain
+            }
+            validators: validators_aggregate(where: {jailed:{_neq:true}}) {
+              aggregate {
+                validator_count: count
+              }
+            }
+          }
+        }
+    - name: gov.proposal.votes
+      query: |
+        query votes ($proposal_id: Int, $limit: Int = 10, $offset: Int = 0) {
+          votes: proposal_vote(where: {proposal_id:{_eq:$proposal_id}}, order_by: {timestamp:desc}, limit: $limit, offset: $offset) {
+            proposal_id
+            tx_hash
+            voter_address
+            option
+            weight
+            height
+            timestamp
+          }
+          counts: proposal_vote_aggregate(where: {proposal_id:{_eq:$proposal_id}}) {
+            aggregate {
+              count
+            }
+          }
+        }
+    - name: key.exists.query
+      query: |
+        query queryKey ($key: String!) {
+          existence_check(args: {key:$key}) {
+            search_type
+          }
+        }
+    - name: kyc_cancel_info
+      query: |
+        query kyc_cancel_info ($address: String = "", $limit: Int = 5, $offset: Int = 0) {
+          kyc_cancel_infos: parsed_message(where: {msg_type:{_eq:"metaearth.kyc.MsgRemove"},detail:{_contains:{receiver:$address}}}, order_by: {height:desc}, limit: $limit, offset: $offset) {
+            height
+            creator: detail(path: "issuer")
+            account: detail(path: "receiver")
+            region_id: detail(path: "region_id")
+            timestamp: block {
+              timestamp
+            }
+            status: transaction {
+              success
+            }
+          }
+        }
+    - name: liquidity
+      query: |
+        query liquidity ($limit: Int = 5, $offset: Int = 0) {
+          region_liquiditys: region_liquidity_view(limit: $limit, offset: $offset, order_by: {liquidity:desc}) {
+            total_umec: liquidity
+            region_id
+          }
+          total_liquidity: region_liquidity_view_aggregate {
+            aggregate {
+              sum {
+                liquidity
+              }
+            }
+          }
+          total_treasure_amount: region_liquidity_view_aggregate {
+            aggregate {
+              sum {
+                treasure_amount
+              }
+            }
+          }
+        }
+    - name: region.account_list
+      query: |
+        query region_account_list ($order_by: [region_states_order_by!] = {region_total_ans:desc}) {
+          region_account_list: region_states(order_by: $order_by) {
+            region_id
+            operator_address
+            delegation_address
+            base_account
+            fixed_delegation_account
+            region_gas_fee_account
+            swap_pool
+            kyc_vault_address
+            gov_addresses
+            kyc_invite_pool
+          }
+        }
+    - name: region.delegate_summary
+      query: |
+        query delegate_summary ($region_id: String, $sub_region_id: String = "") {
+          region: region_delegation_view(where: {region_id:{_eq:$region_id}}) {
+            region_id
+            region_state {
+              total_ans: region_total_ans
+              allow_ans: region_total_stake_allow_ans
+            }
+            kyc_amount
+            delegation_amount
+            fixed_deposit_amount
+            lock_up_deposit_amount
+            age_ratio
+            undelegateable_amount
+          }
+          sub_region: sub_region_delegation_view(where: {approve_region_id:{_eq:$sub_region_id}}) {
+            region_id: approve_region_id
+            kyc_amount
+            delegation_amount
+            fixed_deposit_amount
+            lock_up_deposit_amount
+          }
+        }
+    - name: region.detail
+      query: |
+        query region_detail ($region_id: String!) {
+          region_states(where: {region_id:{_eq:$region_id}}) {
+            region_id
+            total_max_stake: user_max_delegate_gea
+            total_stake: current_demand_total_ugea
+            total_ans: current_occupy_ans
+            current_kyc_amount
+            treasury: base_account
+            delegate: delegation_address
+            operator: operator_address
+            swap_pool
+            interest: fixed_delegation_account
+            gas_fee: region_gas_fee_account
+            kyc_vault: kyc_vault_address
+            kyc_invite: kyc_invite_pool
+            gov_addresses
+          }
+          address_info: region_states(where: {region_id:{_eq:$region_id}}) {
+            operator: balance_operator {
+              address
+              ugea_amount
+            }
+            delegate: balance_delegate {
+              address
+              ugea_amount
+            }
+            treasury: balance_base_account {
+              address
+              ugea_amount
+            }
+            interest: balance_interest {
+              address
+              ugea_amount
+            }
+            swap_pool: balance_swap_pool {
+              address
+              ugea_amount
+            }
+          }
+          checkin_today_count(where: {region_id:{_eq:$region_id}}) {
+            check_in_count
+          }
+          total_liquidity: region_liquidity_view(where: {region_id:{_eq:$region_id}}) {
+            liquidity
+          }
+          total_stake_address_count: staking_counts_aggregate(where: {region_id:{_eq:$region_id}}) {
+            aggregate {
+              count(distinct: true)
+            }
+          }
+          delegation_address_count: staking_counts_aggregate(where: {region_id:{_eq:$region_id},has_delegation:{_eq:true}}) {
+            aggregate {
+              count(distinct: true)
+            }
+          }
+          fixed_address_count: staking_counts_aggregate(where: {region_id:{_eq:$region_id},has_fixed_deposit:{_eq:true}}) {
+            aggregate {
+              count(distinct: true)
+            }
+          }
+          lock_up_address_count: staking_counts_aggregate(where: {region_id:{_eq:$region_id},has_lock_up_deposit:{_eq:true}}) {
+            aggregate {
+              count(distinct: true)
+            }
+          }
+        }
+    - name: region.info
+      query: |
+        query region_info {
+          block: average_block_time_per_hour {
+            average_time
+            height
+          }
+          total_kyc_count: kyc_count_view_aggregate {
+            aggregate {
+              sum {
+                count
+              }
+            }
+          }
+          total_stake_count: region_states_aggregate {
+            aggregate {
+              sum {
+                current_demand_total_ugea
+              }
+            }
+          }
+          fixed_count: region_states_aggregate {
+            aggregate {
+              sum {
+                current_fixed_delegation_total_ugea
+              }
+            }
+          }
+          delegation_count: region_states_aggregate {
+            aggregate {
+              sum {
+                current_normal_delegation_total_ugea
+              }
+            }
+          }
+          lock_up_count: region_states_aggregate {
+            aggregate {
+              sum {
+                current_lock_up_total_ugea
+              }
+            }
+          }
+          total_stake_address_count: staking_counts_aggregate {
+            aggregate {
+              count(distinct: true)
+            }
+          }
+          delegation_address_count: staking_counts_aggregate(where: {has_delegation:{_eq:true}}) {
+            aggregate {
+              count(distinct: true)
+            }
+          }
+          fixed_address_count: staking_counts_aggregate(where: {has_fixed_deposit:{_eq:true}}) {
+            aggregate {
+              count(distinct: true)
+            }
+          }
+          lock_up_address_count: staking_counts_aggregate(where: {has_lock_up_deposit:{_eq:true}}) {
+            aggregate {
+              count(distinct: true)
+            }
+          }
+          total_ans_count: region_states_aggregate {
+            aggregate {
+              sum {
+                current_occupy_ans
+              }
+            }
+          }
+          region_list: region_states {
+            region_id
+            kyc_count {
+              count
+            }
+            checkin_today_count {
+              check_in_count
+            }
+            total_stake: current_demand_total_ugea
+            total_fixed: current_fixed_delegation_total_ugea
+            total_delegation: current_normal_delegation_total_ugea
+            total_lock_up: current_lock_up_total_ugea
+            total_ans: current_occupy_ans
+          }
+        }
+    - name: region.list
+      query: |
+        query region_list ($order_by: [region_states_order_by!] = {region_total_ans:desc}) {
+          region_states(order_by: $order_by) {
+            region_id
+            current_kyc_amount
+            checkin_today_count {
+              check_in_count
+            }
+            all_delegation_total_ugea {
+              current_all_delegation_total_ugea
+            }
+            current_fixed_delegation_total_ugea
+            current_normal_delegation_total_ugea
+            current_lock_up_total_ugea
+            current_occupy_ans
+          }
+        }
+    - name: region.staking_trends
+      query: |
+        query staking_trends ($region_id: String!, $limit: Int = 12, $offset: Int = 0, $after_time: timestamptz!, $before_time: timestamptz!) {
+          staking_trends: stake_trend_view(limit: $limit, offset: $offset, order_by: {height:asc}, where: {region_id:{_eq:$region_id},at_date:{_gte:$after_time,_lt:$before_time}}) {
+            date
+            fixed_deposit_amount
+            delegate_amount
+            lock_up_amount
+            individual_equity_holdings
+          }
+          staking_trends_aggregate: stake_trend_view_aggregate(where: {region_id:{_eq:$region_id},at_date:{_gte:$after_time,_lt:$before_time}}) {
+            aggregate {
+              count
+            }
+          }
+        }
+    - name: region.statistic
+      query: |
+        query region_statistic {
+          region_count: region_states_aggregate {
+            aggregate {
+              count
+            }
+          }
+          total_kyc_count: region_states_aggregate {
+            aggregate {
+              sum {
+                current_kyc_amount
+              }
+            }
+          }
+          region_states_with_all_delegation_aggregate {
+            aggregate {
+              sum {
+                current_all_delegation_total_ugea
+              }
+            }
+          }
+          fixed_count: region_states_aggregate {
+            aggregate {
+              sum {
+                current_fixed_delegation_total_ugea
+              }
+            }
+          }
+          delegation_count: region_states_aggregate {
+            aggregate {
+              sum {
+                current_normal_delegation_total_ugea
+              }
+            }
+          }
+          lock_up_count: region_states_aggregate {
+            aggregate {
+              sum {
+                current_lock_up_total_ugea
+              }
+            }
+          }
+          staking_stats_by_region_aggregate {
+            aggregate {
+              sum {
+                total_delegation_address: has_delegation_count
+                total_fixed_address: has_fixed_deposit_count
+                total_lock_up_address: has_lock_up_deposit_count
+              }
+            }
+          }
+          total_ans_count: region_states_aggregate {
+            aggregate {
+              sum {
+                current_occupy_ans
+              }
+            }
+          }
+        }
+    - name: region_liquidity
+      query: |
+        query region_liquidity ($region_id: String!) {
+          region_liquidity_view(where: {region_id:{_eq:$region_id}}) {
+            total_umec: liquidity
+            region_id
+          }
+        }
+    - name: rollapp.detail
+      query: |
+        query rollapp_datail ($rollapp_id: String!, $limit: Int = 10, $offset: Int = 0) {
+          rollapps(limit: $limit, offset: $offset, order_by: {rollapp_id:asc}, where: {rollapp_id:{_eq:$rollapp_id}}) {
+            rollapp_id
+            business_type
+            creator
+            create_tx {
+              hash
+              block {
+                height
+                timestamp
+              }
+            }
+            states {
+              latest_state: base_info(path: "latestStateIndex")
+              latest_finalized_state: base_info(path: "latestFinalizedStateIndex")
+            }
+            sequencer {
+              sequencer_address
+              sequencer_state
+              state_msgs(order_by: {update_rollapp_to_height:desc,start_height:desc}, limit: 1, where: {success:{_eq:true}}) {
+                tx_hash
+                height
+                blob_start_height: start_height
+                blob_to_height: update_rollapp_to_height
+              }
+            }
+            sequencer_count: sequencer_aggregate {
+              aggregate {
+                count
+              }
+            }
+          }
+        }
+    - name: rollapp.list
+      query: |
+        query rollapp_list ($limit: Int = 10, $offset: Int = 0) {
+          rollapps(limit: $limit, offset: $offset, order_by: {rollapp_id:asc}) {
+            rollapp_id
+            business_type
+            creator
+            create_tx {
+              hash
+              block {
+                height
+                timestamp
+              }
+            }
+            states {
+              latest_state: base_info(path: "latestStateIndex")
+              latest_finalized_state: base_info(path: "latestFinalizedStateIndex")
+            }
+            sequencer {
+              sequencer_address
+              sequencer_state
+              state_msgs(order_by: {update_rollapp_to_height:desc,start_height:desc}, limit: 1, where: {success:{_eq:true}}) {
+                tx_hash
+                height
+                blob_start_height: start_height
+                blob_to_height: update_rollapp_to_height
+              }
+            }
+            sequencer_count: sequencer_aggregate {
+              aggregate {
+                count
+              }
+            }
+          }
+          counts: rollapps_aggregate {
+            aggregate {
+              count
+            }
+          }
+        }
+    - name: rollapp.sequencers
+      query: |
+        query sequencers ($rollappID: String!, $limit: Int = 10, $offset: Int = 0) {
+          sequencer_states(where: {rollapp_id:{_eq:$rollappID}}, limit: $limit, offset: $offset) {
+            rollapp_id
+            sequencer_address
+            sequencer_state
+            state_msgs(order_by: {update_rollapp_to_height:desc,start_height:desc}, limit: 1, where: {success:{_eq:true}}) {
+              tx_hash
+              height
+              blob_start_height: start_height
+              blob_to_height: update_rollapp_to_height
+            }
+          }
+          sequencer_states_aggregate(where: {rollapp_id:{_eq:$rollappID}}) {
+            aggregate {
+              count
+            }
+          }
+        }
+    - name: rollapp.update_states
+      query: |
+        query update_states_by_rollapp_id ($rollapp_id: String!, $offset: Int = 0, $limit: Int = 10) {
+          rollapp_state_msgs(offset: $offset, limit: $limit, where: {rollapp_id:{_eq:$rollapp_id}}) {
+            created_at
+            creator
+            height
+            num_blocks
+            rollapp_id
+            start_height
+            success
+            tx_hash
+          }
+          total_update_state_count: rollapp_state_msgs_aggregate {
+            aggregate {
+              count
+            }
+          }
+        }
+    - name: rollapp.update_states_all
+      query: |
+        query update_states ($offset: Int = 0, $limit: Int = 10) {
+          rollapp_state_msgs(offset: $offset, limit: $limit) {
+            created_at
+            creator
+            height
+            num_blocks
+            rollapp_id
+            start_height
+            success
+            tx_hash
+          }
+        }
+    - name: swap.get_account_swap_list
+      query: |
+        query get_account_swap_list ($address: String!, $offset: Int = 0, $limit: Int = 10) {
+          list: message(where: {involved_accounts_addresses:{_contains:[$address]},type:{_eq:"gea.staking.MsgSwap"}}, offset: $offset, limit: $limit) {
+            hash: transaction_hash
+            status: transaction {
+              success
+            }
+            detail: parsed_message {
+              swap_address: detail(path: "token_in_to")
+              address: detail(path: "token_out_to")
+              from_amount: detail(path: "token_in_amount")
+              to_amount: detail(path: "token_out_amount")
+            }
+            block {
+              timestamp
+            }
+          }
+          total_count: message_aggregate(where: {involved_accounts_addresses:{_contains:[$address]},type:{_eq:"gea.staking.MsgSwap"}}) {
+            aggregate {
+              count
+            }
+          }
+        }
+    - name: transfer_region
+      query: |
+        query transfer_region ($address: String!) {
+          parsed_message(where: {msg_type:{_eq:"metaearth.kyc.MsgUpdate"},transaction:{messages_objs:{involved_accounts_addresses:{_contains:[$address]}}}}, order_by: {height:asc_nulls_first}) {
+            tx_hash
+            transfer_region: detail(path: "transfer_region")
+            height
+            transaction {
+              logs
+              block {
+                timestamp
+              }
+            }
+          }
+        }
+    - name: tx.asset_change_log
+      query: |
+        query asset_change_log ($address: String!, $tx_hash: String!) {
+          asset_change_logs: asset_change_logs_view(where: {address:{_eq:$address},tx_hash:{_eq:$tx_hash}}) {
+            address
+            before_change
+            change
+            after_change
+            height
+            tx_hash
+            trigger_by
+          }
+        }
+    - name: tx.detail
+      query: |
+        query tx ($hash: String = "") {
+          transaction(where: {hash:{_eq:$hash}}) {
+            height
+            hash
+            success
+            tx_signers {
+              address: fee_payer
+            }
+            memo
+            gas_wanted
+            gas_used
+            gas_limit: fee(path: "gas_limit")
+            gas_fee {
+              fee_amount
+              fee_denom
+              receivers
+            }
+            time: block {
+              timestamp
+            }
+            msgs {
+              index
+              type
+              body: value
+              parsed_message {
+                description
+                detail
+              }
+            }
+            raw_log
+          }
+        }
+    - name: tx.get_tx_raw_log
+      query: |
+        query get_tx_raw_log ($hash: String!) {
+          data: get_tx_raw_logs(args: {hash:$hash}) {
+            raw_log
+          }
+        }
+    - name: tx.ibc.transfer.list
+      query: |
+        query ibc_transfer ($limit: Int = 10, $offset: Int = 0) {
+          ibc_transfer_records(limit: $limit, offset: $offset) {
+            tx_hash
+            coin
+            sender
+            receiver
+            transfer_type
+            source_port
+            source_channel
+            destination_port
+            destination_channel
+            time: block {
+              timestamp
+            }
+            status: transaction {
+              success
+            }
+          }
+          ibc_transfer_records_aggregate {
+            aggregate {
+              count
+            }
+          }
+        }
+    - name: tx.list
+      query: |
+        query txlist ($limit: Int = 10, $offset: Int = 0) {
+          transaction(limit: $limit, offset: $offset, order_by: {height:desc}) {
+            height
+            hash
+            success
+            msgs_type: msgs {
+              type
+              extra_info
+            }
+            gas_fee {
+              fee_amount
+              fee_denom
+              fee_payer
+            }
+            time: block {
+              timestamp
+            }
+            transfer_amount: transfer_aggregate(where: {msg_type:{_neq:"gas_fee"}}) {
+              aggregate {
+                sum {
+                  ugag_coin_amount: ugag
+                  ugea_coin_amount: ugea
+                }
+              }
+            }
+          }
+          total_tx_counts: transaction_aggregate {
+            aggregate {
+              count
+            }
+          }
+        }
+    - name: tx_daily_counts
+      query: |
+        query tx_daily_counts ($limit: Int = 10, $offset: Int = 0) {
+          list: daily_transaction_counts_view(offset: $offset, limit: $limit, order_by: {id:desc}) {
+            record_date
+            nums
+          }
+        }
+    - name: tx_info
+      query: |
+        query tx_info {
+          total_transactions: transaction_aggregate {
+            aggregate {
+              count
+            }
+          }
+          most_tx_region: region_tx_nums_view(limit: 1, order_by: {count:desc}) {
+            region_id
+          }
+        }
+    - name: user_total_balance
+      query: |
+        query user_total_balance {
+          balance_states_aggregate {
+            aggregate {
+              sum {
+                ugea_amount
+              }
+            }
+          }
+        }
+    - name: validator.blocks
+      query: |
+        query node_blocks ($consensus_address: String!, $limit: Int = 10, $offset: Int = 0) {
+          block(where: {proposer_address:{_eq:$consensus_address}}, limit: $limit, offset: $offset, order_by: {height:desc}) {
+            hash
+            height
+            reward
+            total_gas
+            timestamp
+            proposer_address
+            num_txs
+            gas_fee {
+              total_fee
+              fee_denom
+            }
+          }
+          block_aggregate(where: {proposer_address:{_eq:$consensus_address}}) {
+            aggregate {
+              count
+            }
+          }
+        }
+    - name: validator.detail
+      query: |
+        query validator_detail ($operator_address: String!) {
+          validator_info(where: {operator_address:{_eq:$operator_address}}) {
+            operator_address
+            consensus_address
+            voting_power: power {
+              power: voting_power
+            }
+            description {
+              moniker
+            }
+            status {
+              status
+              jailed
+            }
+          }
+          validator_voting_power_aggregate {
+            aggregate {
+              sum {
+                voting_power
+              }
+            }
+          }
+        }
+    - name: validator.list
+      query: |
+        query validator_list {
+          validator_info(order_by: {power:{voting_power:desc,validator_address:desc}}) {
+            operator_address
+            consensus_address
+            voting_power: power {
+              power: voting_power
+            }
+            description {
+              moniker
+            }
+            status {
+              status
+              jailed
+            }
+          }
+          validator_info_aggregate {
+            aggregate {
+              count
+            }
+          }
+          validator_voting_power_aggregate {
+            aggregate {
+              sum {
+                voting_power
+              }
+            }
+          }
+        }

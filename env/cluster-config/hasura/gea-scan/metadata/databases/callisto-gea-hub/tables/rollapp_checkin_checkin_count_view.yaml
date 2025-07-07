@@ -1,0 +1,18 @@
+table:
+  name: checkin_count_view
+  schema: rollapp_checkin
+configuration:
+  column_config: {}
+  custom_column_names: {}
+  custom_name: checkin_count
+  custom_root_fields: {}
+object_relationships:
+  - name: today_checkin
+    using:
+      manual_configuration:
+        column_mapping:
+          region_id: region_id
+        insertion_order: null
+        remote_table:
+          name: checkin_today_count_view
+          schema: rollapp_checkin

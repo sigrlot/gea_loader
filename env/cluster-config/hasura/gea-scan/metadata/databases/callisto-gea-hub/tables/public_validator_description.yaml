@@ -1,0 +1,13 @@
+table:
+  name: validator_description
+  schema: public
+object_relationships:
+  - name: region_info
+    using:
+      manual_configuration:
+        column_mapping:
+          region_id: region_id
+        insertion_order: null
+        remote_table:
+          name: region_states
+          schema: public

@@ -1,0 +1,3 @@
+table:
+  name: account_active_record
+  schema: public

@@ -1,0 +1,32 @@
+table:
+  name: rollapps
+  schema: public
+object_relationships:
+  - name: create_tx
+    using:
+      manual_configuration:
+        column_mapping:
+          tx_hash: hash
+        insertion_order: null
+        remote_table:
+          name: transaction
+          schema: public
+  - name: states
+    using:
+      manual_configuration:
+        column_mapping:
+          rollapp_id: rollapp_id
+        insertion_order: null
+        remote_table:
+          name: rollapp_states
+          schema: public
+array_relationships:
+  - name: sequencer
+    using:
+      manual_configuration:
+        column_mapping:
+          rollapp_id: rollapp_id
+        insertion_order: null
+        remote_table:
+          name: sequencer_states
+          schema: public

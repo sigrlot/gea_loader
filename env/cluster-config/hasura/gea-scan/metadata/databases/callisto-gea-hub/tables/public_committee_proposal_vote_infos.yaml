@@ -1,0 +1,3 @@
+table:
+  name: committee_proposal_vote_infos
+  schema: public

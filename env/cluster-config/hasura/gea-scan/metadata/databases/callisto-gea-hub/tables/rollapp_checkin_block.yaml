@@ -1,0 +1,8 @@
+table:
+  name: block
+  schema: rollapp_checkin
+configuration:
+  column_config: {}
+  custom_column_names: {}
+  custom_name: block_rollapp1
+  custom_root_fields: {}

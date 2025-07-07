@@ -1,0 +1,3 @@
+table:
+  name: validator_status
+  schema: public

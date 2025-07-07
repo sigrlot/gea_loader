@@ -1,0 +1,3 @@
+table:
+  name: region_tx_nums_view
+  schema: public

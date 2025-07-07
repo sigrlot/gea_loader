@@ -1,0 +1,14 @@
+table:
+  name: transfer_of_msgs_result
+  schema: public
+array_relationships:
+  - name: transfers
+    using:
+      manual_configuration:
+        column_mapping:
+          index: msg_index
+          transaction_hash: tx_hash
+        insertion_order: null
+        remote_table:
+          name: transfer_in_msgs
+          schema: public

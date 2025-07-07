@@ -1,0 +1,3 @@
+table:
+  name: did_services
+  schema: public

@@ -1,0 +1,3 @@
+table:
+  name: committee_candidate_infos
+  schema: public

@@ -1,0 +1,1770 @@
+- comment: |-
+    ## 查询所有治理地址（给资管用）
+    分页查询所有治理地址，包括系统地址、全网治理地址、区域治理奖励金库
+    - @author: Jack
+    - 请求方式：get
+    - 请求路径：/api/rest/account/all_governance_account
+    - 请求参数：limit: 默认10；offset: 默认0
+
+    ```js
+    {
+        "governance_community_accounts": [
+            {
+                "address": "gea1k9f0tr647y0agx9yue65vkmqz24h0nj0acd0vn",
+                "account_type": 1,
+                "name": "gov_1",
+                "note": "全网50个治理地址",
+                "region_id": "",
+                "tag": "whole_network_governance_address"
+            },
+            {
+                "address": "gea1nupjj56vpat7mymmnyzpjzvh208rvdc47euedh",
+                "account_type": 0,
+                "name": "governance_reward_pool",
+                "note": "CHN治理奖励金库",
+                "region_id": "chn",
+                "tag": "governance_reward_pool"
+            }
+        ],
+        "governance_community_accounts_aggregate": {
+            "aggregate": {
+                "count": 55
+            }
+        }
+    }
+    ```
+
+    **
+  definition:
+    query:
+      collection_name: allowed-queries
+      query_name: account.all_governance_address
+  methods:
+    - GET
+  name: account.all_governance_address
+  url: account/all_governance_address
+- comment: |-
+    查询指定地址在指定交易中的资产变化
+
+    - 请求参数：address: 地址, tx_hash: 交易hash
+    - 请求方式：GET
+    - 返回结果示例
+
+    ``` json
+    {
+        "asset_change_logs": [
+            {
+                "address": "gea1fqua3uandg7g802evdvdmmlz6snxrde257txhl",
+                "before_change": [
+                    "899600001ugea",
+                    "1ugag"
+                ],
+                "change": [
+                    "-399999ugea",
+                    "1ugag"
+                ],
+                "after_change": [
+                    "899200002ugea",
+                    "2ugag"
+                ],
+                "height": 2395,
+                "tx_hash": "C9CDC78CE435E5BFD663896D3BF28AD45D0C4E5B5535BFF772AA44CED22F1774",
+                "trigger_by": "{ante_handler,gea.staking.MsgWithdrawDelegationInterest}"
+            }
+        ]
+    }
+    ```
+    ***
+  definition:
+    query:
+      collection_name: allowed-queries
+      query_name: asset_change_log
+  methods:
+    - GET
+  name: asset_change_log
+  url: account/asset-change-log
+- comment: 查询账号在某个区域的质押金额汇总
+  definition:
+    query:
+      collection_name: allowed-queries
+      query_name: account.delegate_amount
+  methods:
+    - GET
+  name: account.delegate_amount
+  url: account/delegate_amount
+- comment: |-
+    查询账户的质押信息：
+    1. current_region_delegate 为账户在其所属行政区的质押信息
+    2. region_delegate_summary 为账户所属行政区的质押统计信息
+    3. sub_region_delegate_summary 为账户所属子行政区（尚未开区）的质押统计信息
+  definition:
+    query:
+      collection_name: allowed-queries
+      query_name: account.delegate_info
+  methods:
+    - GET
+  name: account.delegate_info
+  url: account/delegate_info
+- comment: 查询核心事件视角下的账户消息列表，目前仅支持星级交易类型。
+  definition:
+    query:
+      collection_name: allowed-queries
+      query_name: account.event_of_msgs
+  methods:
+    - POST
+  name: account.event_of_msgs
+  url: account/event_of_msgs
+- comment: |-
+    ## 查询全网的50个治理地址
+    - @author: Jack
+    - 请求方式：get
+    - 请求路径：/api/rest/account/governance-address
+    - 请求参数：limit: 默认10；offset: 默认0
+
+    ```js
+    {
+        "governance_community_accounts": [
+            {
+                "address": "gea1k9f0tr647y0agx9yue65vkmqz24h0nj0acd0vn",
+                "account_type": 1,
+                "name": "gov_1",
+                "tag": "whole_network_governance_address"
+            },
+            {
+                "address": "gea1nupjj56vpat7mymmnyzpjzvh208rvdc47euedh",
+                "account_type": 1,
+                "name": "gov_2",
+                "tag": "whole_network_governance_address"
+            }
+        ],
+        "governance_community_accounts_aggregate": {
+            "aggregate": {
+                "count": 50
+            }
+        }
+    }
+    ```
+
+    **
+  definition:
+    query:
+      collection_name: allowed-queries
+      query_name: account.governance_address
+  methods:
+    - GET
+  name: account.governance_address
+  url: account/governance_address
+- comment: |-
+    查询指定地址所获得的kyc邀请奖励交易列表，默认按区块高度降序排列
+
+    - 请求方式：get
+    - 请求参数：limit: 默认10，可以不填; offset 默认0，可以不填; address: 地址，必填
+    - 请求示例：/api/rest/account/kyc_invite_rewards/{address}
+
+    **
+  definition:
+    query:
+      collection_name: allowed-queries
+      query_name: account.kyc_invite_rewards
+  methods:
+    - GET
+  name: account.kyc_invite_rewards
+  url: account/kyc_invite_rewards/:address
+- comment: |-
+    ## 获取指定地址关联的模块化交易列表，查询结果按区块高度Desc返回
+    - 请求方式：get
+    - 请求url: /api/rest/account/module_txs/{address}
+    - 请求参数: limit：返回条数，默认10; offset：偏移量，默认0;
+
+    ```json
+    {
+      "module_account_transfers": [
+        {
+          "tx_hash": "881661A9DBBB5B16A91B3CDA137E2F81B33337F5F7DF7AE2A160AAC0B4F9362E",
+          "from_address": "gea12g0y6m8hmfkcy6c48xeqc230het6lanwqla593",
+          "to_address": "gea19f8g2yh3lyk0zx4m8tkl8na2gwnhc89manegh0",
+          "msg_index": 0,
+          "invoke_address": [
+            "gea12g0y6m8hmfkcy6c48xeqc230het6lanwqla593",
+            "gea19f8g2yh3lyk0zx4m8tkl8na2gwnhc89manegh0"
+          ],
+          "height": 25651,
+          "has_ibc_token": false,
+          "token_types": [
+            "ugea"
+          ],
+          "amount": "1000000000ugea",
+          "type": "gea.staking.MsgCreateDelegate",
+          "block": {
+            "timestamp": "2025-04-21T12:06:34.663103+00:00"
+          },
+          "transaction": {
+            "success": true
+          },
+          "tag": "gea.staking.MsgCreateDelegate"
+        },
+        {
+          "tx_hash": null,
+          "from_address": "gea17gkvxkqdqeem28u0t8rtxjtgdtgc2cexjk8wt6",
+          "to_address": "gea12g0y6m8hmfkcy6c48xeqc230het6lanwqla593",
+          "msg_index": null,
+          "invoke_address": [
+            "gea12g0y6m8hmfkcy6c48xeqc230het6lanwqla593",
+            "gea17gkvxkqdqeem28u0t8rtxjtgdtgc2cexjk8wt6"
+          ],
+          "height": 439,
+          "has_ibc_token": false,
+          "token_types": [
+            "ugag"
+          ],
+          "amount": "200000000ugag",
+          "type": "transfer_in_abci",
+          "block": {
+            "timestamp": "2025-04-17T02:35:45.986935+00:00"
+          },
+          "transaction": null,
+          "tag": "ElectoralRefundVotes_SendCommitteeFoundationToElectoralVoter_gea12g0y6m8hmfkcy6c48xeqc230het6lanwqla593"
+        }
+      ],
+      "module_account_transfers_aggregate": {
+        "aggregate": {
+          "count": 4
+        }
+      }
+    }
+    ```
+
+    **
+  definition:
+    query:
+      collection_name: allowed-queries
+      query_name: account.module_txs
+  methods:
+    - GET
+  name: account.module_txs
+  url: account/module_txs/:address
+- comment: |-
+    ## 查询地址公示中的系统地址
+    - @author: Jack
+    - 请求方式：get
+    - 请求路径：/api/rest/account/system_address
+    - 请求参数： limit: 默认10；offset: 默认0；
+      region_id默认可以不传，region_id为空时，表示查询非区的地址，region_id不为空时表示查询区的地址
+
+
+    ```json
+    {
+        "governance_community_accounts": [
+            {
+                "address": "gea1yl6hdjhmkf37639730gffanpzndzdpmhqpnuzd",
+                "account_type": 1,
+                "name": "transfer",
+                "region_id": "",
+                "tag": "system_address"
+            }
+        ],
+        "governance_community_accounts_aggregate": {
+            "aggregate": {
+                "count": 4
+            }
+        }
+    }
+    ```
+    **
+  definition:
+    query:
+      collection_name: allowed-queries
+      query_name: account.system_address
+  methods:
+    - GET
+  name: account.system_address
+  url: account/system_address
+- comment: 查询账户在无交易（区块前后置等）情况下发生的转账信息列表。
+  definition:
+    query:
+      collection_name: allowed-queries
+      query_name: account.transfer_of_antes
+  methods:
+    - GET
+  name: account.transfer_of_antes
+  url: account/transfer_of_antes
+- comment: 查询金额统计视角下的账户消息列表，支持转账、质押、置换、奖励等消息类型，每条消息统计gea收支信息，并统计查询范围内的gea、gag总收支信息。
+  definition:
+    query:
+      collection_name: allowed-queries
+      query_name: account.transfer_of_msgs
+  methods:
+    - POST
+  name: account.transfer_of_msgs
+  url: account/transfer_of_msgs
+- comment: "查询指定地址相关的转账信息，查询结果按高度desc返回\n参数\naddress: 填写地址，此为必填项\nlimit:返回条数限制，默认20\noffset:偏移量，默认0\n示例：\n/api/rest/account/transfers/{address}?limit=10&offset=10 \n\n**"
+  definition:
+    query:
+      collection_name: allowed-queries
+      query_name: account.transfers
+  methods:
+    - GET
+  name: account.transfers
+  url: account/transfers/:address
+- comment: "查询与指定地址相关的交易,查询结果按区块高度Desc返回\nurl: /api/rest/account/txs/{address}\n参数:\n- limit：返回条数，默认10;\n- offset：偏移量，默认0;\n  \n**"
+  definition:
+    query:
+      collection_name: allowed-queries
+      query_name: account.txs
+  methods:
+    - GET
+  name: account.txs
+  url: account/txs/:address
+- comment: |-
+    查询平均出块时间（按小时算）和最新区块高度
+
+    - 请求方式：get
+    - 请求参数：无
+    - 请求示例：/api/rest/block/average-block-time
+
+    ```json
+    {
+        "average_block_time_per_hour": [
+            {
+                "average_time": 5.423318929216867
+            }
+        ],
+        "block": [
+            {
+                "latest_block": 33181
+            }
+        ]
+    }
+    ```
+
+    **
+  definition:
+    query:
+      collection_name: allowed-queries
+      query_name: block.average_block_time
+  methods:
+    - GET
+  name: block.average_block_time
+  url: block/average-block-time
+- comment: "同时支持使用post或get查询\n查询指定高度或hash的区块\n参数：二者选其一\nhash: 区块hash\nheight:区块高度\n如果hash和height都是有效值时，则可能返回两个区块，当二者都指向一个区块时，则返回一个区块\n  \n**"
+  definition:
+    query:
+      collection_name: allowed-queries
+      query_name: block.detail
+  methods:
+    - GET
+    - POST
+  name: block.detail
+  url: block/detail
+- comment: "查询区块列表，结果按区块高度DESC排列。\n参数：\n- limit: 限制返回数量，默认为10\n- offset: 查询结果偏移量，默认0\n示例：\n假设最新区块为200，limit为10，查询第二页的参数则为：limit=10&offset=10,结果为区块高度180-190\n  \n**"
+  definition:
+    query:
+      collection_name: allowed-queries
+      query_name: block.list
+  methods:
+    - GET
+  name: block.list
+  url: block/list
+- comment: 查询指定区块高度的模块化地址转账列表
+  definition:
+    query:
+      collection_name: allowed-queries
+      query_name: block.module_transfers
+  methods:
+    - GET
+  name: block.module_transfers
+  url: block/module-transfers
+- comment: 查询指定区块高度的交易列表
+  definition:
+    query:
+      collection_name: allowed-queries
+      query_name: block.txs
+  methods:
+    - GET
+    - POST
+  name: block.txs
+  url: block/txs
+- comment: 查询全网签到统计信息和按起止时间过滤的签到统计信息
+  definition:
+    query:
+      collection_name: allowed-queries
+      query_name: checkin.count
+  methods:
+    - POST
+  name: checkin.count
+  url: checkin/count
+- comment: |-
+    获取地址签到总数
+    - 请求参数：{address}
+    - 请求url: /api/rest/checkin/count/{address}
+    - 返回示例：
+    ``` json
+    {
+        "checkin_count": {
+            "aggregate": {
+                "count": 0
+            }
+        }
+    }
+    ```
+    ***
+  definition:
+    query:
+      collection_name: allowed-queries
+      query_name: checkin.count.address
+  methods:
+    - GET
+  name: checkin.count.address
+  url: checkin/count/:address
+- comment: "## 查询签到rollapp签到列表\n### 参数\n- limit  返回条数\n- offset 偏移量\n\n## 返回示例\n``` \n{\n    \"check_in_record\": [\n      {\n        \"address\": \"gea1zdsks4qejej669gus6t3sx7uwy76a6vj57naya\",\n        \"transition_hash\": \"41E472F746052EEDDA9C2A92AB639C19F7F79108721FE8871AB6A171AEDDB2B3\",\n        \"check_in_time\": \"2025-01-16T01:53:09.320289+00:00\",\n        \"height\": 391,\n\"did\": {\n          \"kyc\": {\n            \"region_id\": \"global_village\"\n          }\n        }\n      }\n    ],\n    \"check_in_record_aggregate\": {\n      \"aggregate\": {\n        \"count\": 1\n      }\n    }\n  }\n```\n  \nauthor:@james\n\n--\n\n**"
+  definition:
+    query:
+      collection_name: allowed-queries
+      query_name: checkin.list
+  methods:
+    - GET
+  name: checkin.list
+  url: checkin/list
+- comment: |-
+    ## 查询签到交易详情
+    - 请求参数：hash （必填）
+    - 返回数据示例
+    ``` json
+    {
+        "transaction_rollapp1": [
+          {
+            "hash": "41E472F746052EEDDA9C2A92AB639C19F7F79108721FE8871AB6A171AEDDB2B3",
+            "height": 391,
+            "fee": {
+              "payer": "",
+              "amount": [],
+              "granter": "",
+              "gas_limit": "200000"
+            },
+            "gas_used": 62712,
+            "gas_wanted": -1,
+            "logs": [
+              {
+                "events": [
+                  {
+                    "type": "message",
+                    "attributes": [
+                      {
+                        "key": "action",
+                        "value": "/stchain.rollapp.checkin.MsgCheckIn"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "stchain.rollapp.checkin.EventCheckIn",
+                    "attributes": [
+                      {
+                        "key": "CheckInAtTime",
+                        "value": "\"2025-01-16T01:53:09.320288699Z\""
+                      },
+                      {
+                        "key": "address",
+                        "value": "\"me1ed53f6zj6pqy4yutkp8fdc47tjn4znfzwswq9y\""
+                      }
+                    ]
+                  }
+                ],
+                "msg_index": 0
+              }
+            ],
+            "memo": "",
+            "messages": [
+              {
+                "@type": "/stchain.rollapp.checkin.MsgCheckIn",
+                "creator": "me1ed53f6zj6pqy4yutkp8fdc47tjn4znfzwswq9y"
+              }
+            ],
+            "raw_log": "[{\"msg_index\":0,\"events\":[{\"type\":\"message\",\"attributes\":[{\"key\":\"action\",\"value\":\"/stchain.rollapp.checkin.MsgCheckIn\"}]},{\"type\":\"stchain.rollapp.checkin.EventCheckIn\",\"attributes\":[{\"key\":\"CheckInAtTime\",\"value\":\"\\\"2025-01-16T01:53:09.320288699Z\\\"\"},{\"key\":\"address\",\"value\":\"\\\"me1ed53f6zj6pqy4yutkp8fdc47tjn4znfzwswq9y\\\"\"}]}]}]",
+            "checkin_records": [
+              {
+                "address": "me1ed53f6zj6pqy4yutkp8fdc47tjn4znfzwswq9y",
+                "check_in_time": "2025-01-16T01:53:09.320289+00:00"
+              }
+            ]
+          }
+        ]
+      }
+    ```
+    @james
+    --
+    **
+  definition:
+    query:
+      collection_name: allowed-queries
+      query_name: checkin.record.detail
+  methods:
+    - GET
+  name: checkin.record.detail
+  url: checkin/record/detail
+- comment: ""
+  definition:
+    query:
+      collection_name: allowed-queries
+      query_name: checkin.region.counts
+  methods:
+    - GET
+  name: checkin.region.counts
+  url: checkin/region/counts
+- comment: 查询行政区内的签到交易列表
+  definition:
+    query:
+      collection_name: allowed-queries
+      query_name: checkin.region.txs
+  methods:
+    - GET
+  name: checkin.region.txs
+  url: checkin/region/txs
+- comment: |-
+    ## 查询某一届竞选某个候选人的得票记录
+    根据某一届的竞选ID和候选人的地址，查询该候选人的得票记录
+    - @author: Jack
+    - 请求方式：get
+    - 请求路径：/api/rest/committee/candidate_detail
+    - 请求参数：election_id：竞选ID；address：候选人地址
+
+    ```js
+    {
+        "committee_candidate_infos": [
+            {
+                "candidate_address": "gea12g0y6m8hmfkcy6c48xeqc230het6lanwqla593",
+                "candidate_id": 3,
+                "election_id": 4,
+                "vote_amount_ugag": 200000000,
+                "is_elected": true
+            }
+        ]
+    }
+    ```
+
+    **
+  definition:
+    query:
+      collection_name: allowed-queries
+      query_name: committee.candidate_detail
+  methods:
+    - GET
+  name: committee.candidate_detail
+  url: committee/candidate_detail
+- comment: |-
+    ## 查询某一届竞选所有候选人的得票记录
+    根据某一届的竞选ID，分页查询该届竞选所有候选人的得票记录
+    - @author: Jack
+    - 请求方式：get
+    - 请求路径：/api/rest/committee/candidate_info
+    - 请求参数：limit: 默认10；offset: 默认0；election_id：竞选ID
+
+    ```js
+    {
+        "committee_candidate_infos": [
+            {
+                "candidate_address": "gea12g0y6m8hmfkcy6c48xeqc230het6lanwqla593",
+                "candidate_id": 3,
+                "election_id": 4,
+                "vote_amount_ugag": 200000000,
+                "is_elected": true
+            },
+            {
+                "candidate_address": "gea1fw8ztpjvlexvpvt6vx7kwyr7cmhl7u9q7ywmln",
+                "candidate_id": 4,
+                "election_id": 4,
+                "vote_amount_ugag": 100000000,
+                "is_elected": false
+            }
+        ],
+        "committee_candidate_infos_aggregate": {
+            "aggregate": {
+                "count": 2
+            }
+        }
+    }
+    ```
+
+    **
+  definition:
+    query:
+      collection_name: allowed-queries
+      query_name: committee.candidate_info
+  methods:
+    - GET
+  name: committee.candidate_info
+  url: committee/candidate_info
+- comment: |-
+    ## 查询某一届竞选所有投票人的投票记录
+    根据某一届的竞选ID，分页查询该届竞选所有投票人的投票记录
+    - @author: Jack
+    - 请求方式：get
+    - 请求路径：/api/rest/committee/election_vote_info
+    - 请求参数：limit: 默认10；offset: 默认0；election_id：竞选ID
+
+    ```js
+    {
+        "committee_electoral_vote_infos": [
+            {
+                "candidate_id": 3,
+                "election_id": 4,
+                "tx_hash": "187C26A1ABB408CFCC9696D9C1DC5333199280B5981737764F0C96978A0FC91A",
+                "vote_address": "gea12g0y6m8hmfkcy6c48xeqc230het6lanwqla593",
+                "vote_receiver": "gea1v5xmg02fpplvfq6ylyz5yp89ckjuhj570xzkle",
+                "vote_amount_ugag": 200000000
+            },
+            {
+                "candidate_id": 4,
+                "election_id": 4,
+                "tx_hash": "5FCC4E40B9DD23A83DD1ECD726BA56A83D5FC5405FBAED2C8DBC922FB6BA9624",
+                "vote_address": "gea12g0y6m8hmfkcy6c48xeqc230het6lanwqla593",
+                "vote_receiver": "gea1v5xmg02fpplvfq6ylyz5yp89ckjuhj570xzkle",
+                "vote_amount_ugag": 100000000
+            }
+        ],
+        "committee_electoral_vote_infos_aggregate": {
+            "aggregate": {
+                "count": 2
+            }
+        }
+    }
+    ```
+
+    **
+  definition:
+    query:
+      collection_name: allowed-queries
+      query_name: committee.election_vote_info
+  methods:
+    - GET
+  name: committee.election_vote_info
+  url: committee/election_vote_info
+- comment: |-
+    ## 查询某一次提案支持和反对的地址数
+    根据某一次的提案ID，查询该次提案支持和反对的地址数（人头数）
+    - @author: Jack
+    - 请求方式：get
+    - 请求路径：/api/rest/committee/proposal_vote_address_count
+    - 请求参数：proposal_id：提案ID
+
+    ```js
+    {
+        "proposal_vote_summary_address_count": [
+            {
+                "against_address_count": 2,
+                "proposal_id": 2,
+                "support_address_count": 1
+            }
+        ]
+    }
+    ```
+
+    **
+  definition:
+    query:
+      collection_name: allowed-queries
+      query_name: committee.proposal_vote_address_count
+  methods:
+    - GET
+  name: committee.proposal_vote_address_count
+  url: committee/proposal_vote_address_count
+- comment: |-
+    ## 查询某一次提案所有投票人的投票记录
+    根据某一次的提案ID，分页查询该次提案所有投票人的投票记录
+    - @author: Jack
+    - 请求方式：get
+    - 请求路径：/api/rest/committee/proposal_vote_info
+    - 请求参数：limit: 默认10；offset: 默认0；proposal_id：提案ID
+
+    ```js
+    {
+        "committee_proposal_vote_infos": [
+            {
+                "is_support": true,
+                "proposal_id": 2,
+                "tx_hash": "{78E136EB3E245996781B84E9AE36F6C50A15EA41753C25A1F6C7CE3A3EAEF4CF,48D3E8FC332BC243E3DB4A8FE5B7BA53E20896AE8E4CE0065F4AFA7035270C35}",
+                "vote_address": "gea19c29dhpsg4udjk5fvafwu3txtd85dkpy2zdqnd",
+                "vote_amount_ugag": 600000000
+            },
+            {
+                "is_support": false,
+                "proposal_id": 2,
+                "tx_hash": "{7A4F2E3B27C4AF9AAA3EEC2B6D6D3D090584B586E457C97600ACADF42C04DDA1}",
+                "vote_address": "gea19c29dhpsg4udjk5fvafwu3txtd85dkpy2zdqnd",
+                "vote_amount_ugag": 300000000
+            }
+        ],
+        "committee_proposal_vote_infos_aggregate": {
+            "aggregate": {
+                "count": 2
+            }
+        }
+    }
+    ```
+
+    **
+  definition:
+    query:
+      collection_name: allowed-queries
+      query_name: committee.proposal_vote_info
+  methods:
+    - GET
+  name: committee.proposal_vote_info
+  url: committee/proposal_vote_info
+- comment: |-
+    ## 查询某一次提案支持和反对的总GAG票数
+    根据某一次的提案ID，查询该次提案支持和反对的总GAG票数
+    - @author: Jack
+    - 请求方式：get
+    - 请求路径：/api/rest/committee/proposal_vote_summary
+    - 请求参数：proposal_id：提案ID
+
+    ```js
+    {
+        "proposal_vote_summary": [
+            {
+                "is_support": false,
+                "proposal_id": 2,
+                "total_vote_amount": 500000000
+            },
+            {
+                "is_support": true,
+                "proposal_id": 2,
+                "total_vote_amount": 600000000
+            }
+        ]
+    }
+    ```
+
+    **
+  definition:
+    query:
+      collection_name: allowed-queries
+      query_name: committee.proposal_vote_result
+  methods:
+    - GET
+  name: committee.proposal_vote_result
+  url: committee/proposal_vote_result
+- comment: "查询每日交易数量交易列表，按当天日期往后desc\n参数：\n- limit: 默认10\n- offset: 默认0\n\n  \n\n**"
+  definition:
+    query:
+      collection_name: allowed-queries
+      query_name: tx_daily_counts
+  methods:
+    - GET
+  name: tx_daily_counts
+  url: daily/tx-list
+- comment: |-
+    ## 查询提案详情
+    根据提案ID查询提案详情
+    - @author: Jack
+    - 请求方式：get
+    - 请求路径：/api/rest/gov/proposal/detail
+    - 请求参数：proposal_id
+
+    ```json
+    {
+        "proposal": [
+            {
+                "id": 10,
+                "title": "v2upgrade",
+                "type": "/cosmos.gov.v1.MsgExecLegacyContent",
+                "version": "v2",
+                "status": "PROPOSAL_STATUS_REJECTED",
+                "height": "100000",
+                "uri": "",
+                "description": "v11",
+                "proposer_address": "gea19c29dhpsg4udjk5fvafwu3txtd85dkpy2zdqnd",
+                "submit_time": "2025-04-11T10:39:49.584926+00:00",
+                "voting_start_time": "2025-04-11T11:52:35.820795+00:00",
+                "voting_end_time": "2025-04-13T11:52:35.820795+00:00",
+                "deposit": [
+                    {
+                        "transaction_hash": "787C6D0654CE0C95BB60C7C93871F2DF8B301022827BFFE2401AB0510187F0E2"
+                    }
+                ],
+                "vote_tally": [
+                    {
+                        "yes": "0",
+                        "no": "100000000",
+                        "no_with_veto": "0",
+                        "abstain": "0"
+                    }
+                ]
+            }
+        ]
+    }
+    ```
+
+    **
+  definition:
+    query:
+      collection_name: allowed-queries
+      query_name: gov.proposal.detail
+  methods:
+    - GET
+  name: gov.proposal.detail
+  url: gov/proposal/detail
+- comment: |-
+    ## 查询提案列表
+    @auth: Jack
+    - 请求方式：get
+    - 请求路径：/api/rest/gov/proposal/list
+    - 请求参数：limit: 默认10；offset: 默认0
+
+    ```json
+    {
+        "proposal": [
+            {
+                "id": 10,
+                "title": "v2upgrade",
+                "type": "/cosmos.gov.v1.MsgExecLegacyContent",
+                "status": "PROPOSAL_STATUS_REJECTED",
+                "submit_time": "2025-04-11T10:39:49.584926+00:00"
+            }
+        ],
+        "counts": {
+            "aggregate": {
+                "count": 10
+            }
+        }
+    }
+    ```
+
+    **
+  definition:
+    query:
+      collection_name: allowed-queries
+      query_name: gov.proposal.list
+  methods:
+    - GET
+  name: gov.proposal.list
+  url: gov/proposal/list
+- comment: |-
+    ## 查询提案投票的票数和节点数
+    根据提案ID，查询提案投票的票数节点数。
+    - @author: Jack
+    - 请求方式：get
+    - 请求路径：/api/rest/gov/proposal/vote-counts
+    - 请求参数：proposal_id
+
+    ```json
+    {
+        "proposal": [
+            {
+                "vote_weights": [
+                    {
+                        "yes": "200000000",
+                        "no": "100000000",
+                        "no_with_veto": "0",
+                        "abstain": "0"
+                    }
+                ],
+                "validators": {
+                    "aggregate": {
+                        "validator_count": 4
+                    }
+                }
+            }
+        ]
+    }
+    ```
+
+    **
+  definition:
+    query:
+      collection_name: allowed-queries
+      query_name: gov.proposal.vote-counts
+  methods:
+    - GET
+  name: gov.proposal.vote-counts
+  url: gov/proposal/vote-counts
+- comment: |-
+    ## 查询提案投票信息
+    根据提案ID，分页查询提案投票信息，默认按照投票时间降序排列
+    - @author: Jack
+    - 请求方式：get
+    - 请求路径：/api/rest/gov/proposal/votes
+    - 请求参数：proposal_id；limit 默认值10；offset 默认值0
+
+    ```json
+    {
+        "votes": [
+            {
+                "proposal_id": 10,
+                "tx_hash": "E56BC36BD66A7AD46CFF470F8A4234527EFB9240FA668D320A7ACFC84D6A01B9",
+                "voter_address": "gea1350p08g66prt98cayyqxepg0ma5f5e6fagjyuh",
+                "option": "VOTE_OPTION_YES",
+                "weight": "1.000000000000000000",
+                "height": 16624,
+                "timestamp": "2025-04-11T12:19:59+00:00"
+            },
+            {
+                "proposal_id": 10,
+                "tx_hash": "89EF21F31C4F389BB9029CF71BEED297B1378B2A9EB763B27D4CC4440C702071",
+                "voter_address": "gea12g0y6m8hmfkcy6c48xeqc230het6lanwqla593",
+                "option": "VOTE_OPTION_NO",
+                "weight": "1.000000000000000000",
+                "height": 16352,
+                "timestamp": "2025-04-11T11:57:12+00:00"
+            }
+        ],
+        "counts": {
+            "aggregate": {
+                "count": 4
+            }
+        }
+    }
+    ```
+
+    **
+  definition:
+    query:
+      collection_name: allowed-queries
+      query_name: gov.proposal.votes
+  methods:
+    - GET
+  name: gov.proposal.votes
+  url: gov/proposal/votes
+- comment: |-
+    ## 查询KYC取消交易详情
+    - 参数
+    - address: 查询的地址，必填
+    - limit : 默认5，选填
+    - offset: 默认0 ，选填
+    -返回数据示例
+    ```Json
+    {
+        "kyc_cancel_infos": [
+          {
+            "height": 32619,
+            "creator": "me139mq752delxv78jvtmwxhasyrycufsvr0mue6u",
+            "account": "me1hu2d93f9ytgpn3kxwr5dec62pw4sscrcq3e8sl",
+            "region_id": "me_earth",
+            "timestamp": {
+              "timestamp": "2025-01-04T03:21:19.524913"
+            },
+            "status": {
+              "success": true
+            }
+          }
+        ]
+      }
+    ```
+
+    **
+  definition:
+    query:
+      collection_name: allowed-queries
+      query_name: kyc_cancel_info
+  methods:
+    - GET
+  name: kyc_cancel_info
+  url: kyc/cancel/info
+- comment: |-
+    ## 查询流通量信息
+    - 参数
+    - limit : 默认5，选填
+    - offset: 默认0 ，选填
+    -返回数据示例
+    ```Json
+    {
+        "region_liquiditys": [
+          {
+            "total_umec": 0,
+            "region_id": "experience_region"
+          }
+        ],
+        "total_liquidity": {
+          "aggregate": {
+            "sum": {
+              "liquidity": 9.89799979997655e+23
+            }
+          }
+        },
+        "total_treasure_amount": {
+          "aggregate": {
+            "sum": {
+              "treasure_amount": 6389573083828571
+            }
+          }
+        }
+      }
+    ```
+
+    **
+  definition:
+    query:
+      collection_name: allowed-queries
+      query_name: liquidity
+  methods:
+    - GET
+  name: liquidity
+  url: liquidity
+- comment: |-
+    ## 查询所输入key是否存在
+    - @author: Jack
+    - 请求方式：get
+    - 请求路径：/api/rest/query_exists
+    - 请求参数：key
+    ### 返回的字段包含以下类型
+    - block
+    - hub_transition
+    - checkin_transaction
+    - account
+    - module_account
+    - null
+    -----
+    **
+  definition:
+    query:
+      collection_name: allowed-queries
+      query_name: key.exists.query
+  methods:
+    - GET
+  name: key.exists.query
+  url: query_exists
+- comment: |-
+    ## 查询所有区的模块地址，默认按ans降序排序
+    @author: Jack
+    - 请求方式：get
+    - 请求参数：无
+    - 请求示例：/api/rest/region/account-list
+
+    ```json
+    {
+      "region_account_list": [{
+        "region_id": "global_village",
+        "operator_address": "gea1e9nnt4s4m6avfseaklf6l335l7mqsl5uj3vk5t",
+        "delegation_address": "gea19f8g2yh3lyk0zx4m8tkl8na2gwnhc89manegh0",
+        "base_account": "gea1c4g5aekzjn8k4x9hhafhtxvaccc3c6flzmwv7h",
+        "fixed_delegation_account": "gea1ar6wermx6zrq2tp250tks4dr0rvea5m0m2jj3v",
+        "region_gas_fee_account": "gea1e9nnt4s4m6avfseaklf6l335l7mqsl5uj3vk5t",
+        "swap_pool": "gea1fk7lsvktssz99ngd08w5j7audaklmw6mnzu824",
+        "kyc_vault_address": "gea1v02eyh7c40kuca3xgqfckyc2rjqy62ll566t38",
+        "gov_addresses": {
+          "gov_1": "gea10v2m39wmarwh9xms4twjqzqxld8sk2hc98k38t",
+          "gov_2": "gea1m0zj4kdn48v5cp9zf0tdlhw3z4u3uw2cnhqe2c",
+          "gov_3": "gea1hq2hr6ax3ezpgf3q4pgxsrwvajk3qr7wq7wgnr",
+          "gov_4": "gea12fpwkdvnpcz83gnntyggezszreuz4mj8uxnwh9",
+          "gov_5": "gea15r23lzaw847tcq8xrlcaxcvrjrtw76pxrhdalf"
+        },
+        "kyc_invite_pool": "gea14cqcrgl9eeuaaxkpfhxsy5ee7xmf64w4a3ymee"
+      },
+        {
+          "region_id": "chn",
+          "operator_address": "gea15ut5l6n878g7p9p8y2qkfn7358aqqjrhhaj724",
+          "delegation_address": "gea1aq0srphrzmctqvg9j87ffefz2gc46znujyyr7w",
+          "base_account": "gea1hfsh9t5n7r4y390je7us9z9z39ypqswnk8t0fe",
+          "fixed_delegation_account": "gea199kjuxd27adtu3yz8lmlzjcnx4htp9xgq5ttu3",
+          "region_gas_fee_account": "gea1tsmmraupu6062tp7skea0evcu63vdhlpamk37d",
+          "swap_pool": "gea1jxr80e6dnjvf8529fjgem66zxr0xtd8rrjpq3r",
+          "kyc_vault_address": "gea1r3mmlsnhtlpf68dnnmqt64zfh2dqs3wsnghxc9",
+          "gov_addresses": {
+            "gov_1": "gea12pv47fl2q0ydwnyzqnz4kax55xaqs03ue4sgpe",
+            "gov_2": "gea109rzcdwht0q5dhkrff4us250lfchw36hsdqr59",
+            "gov_3": "gea17xxz6y3w6gnmceqr9mrqll5dpn385p5qldqjdc",
+            "gov_4": "gea16mzzq3x9l2qy70mc38fyzxupj6h85nfw8hdpu3",
+            "gov_5": "gea1d7j236aswq4s4flq9vcypust0ft6r4mkqxlujv"
+          },
+          "kyc_invite_pool": "gea1p29vps2ng9tjj3va4hmu8xv60hwe0hphumqevp"
+        }
+      ]
+    }
+    ```
+
+    **
+  definition:
+    query:
+      collection_name: allowed-queries
+      query_name: region.account_list
+  methods:
+    - GET
+  name: region.account_list
+  url: region/account-list
+- comment: 查询区域质押统计信息
+  definition:
+    query:
+      collection_name: allowed-queries
+      query_name: region.delegate_summary
+  methods:
+    - GET
+  name: region.delegate_summary
+  url: region/delegate_summary
+- comment: "# 查询区域详情\n@author: Jack\n- 请求地址：/api/rest/region/detail\n- 请求方式：GET\n- 请求参数：region_id\n- 返回数据示例及说明\n``` json\n{ \n}\n\n```\n***"
+  definition:
+    query:
+      collection_name: allowed-queries
+      query_name: region.detail
+  methods:
+    - GET
+  name: region.detail
+  url: region/detail
+- comment: 查询区总信息和区列表信息
+  definition:
+    query:
+      collection_name: allowed-queries
+      query_name: region.info
+  methods:
+    - GET
+  name: region.info
+  url: region/info
+- comment: |-
+    查询区域内的流通量：
+
+    区域内，普通用户账户里流通的MEC总量，包括用户定期质押和活期质押，不包括个人权益1个MEC
+
+    返回示例
+    ``` json
+     {
+        "region_liquidity_view": [
+          {
+            "total_umec": 904000029,
+            "region_id": "me_earth"
+          }
+        ]
+      }
+    ```
+
+    --
+  definition:
+    query:
+      collection_name: allowed-queries
+      query_name: region_liquidity
+  methods:
+    - GET
+  name: region_liquidity
+  url: region/liquidity
+- comment: "# 查询区域/节点列表\nauthor: Jack\n默认按照区ans总量降序排列\n- 参数：无\n- 返回数据示例\n``` json\n{\n    \"region_states\": [\n        {\n            \"region_id\": \"global_village\",\n            \"kyc_count\": {\n                \"count\": 1    // 已认证地址数\n            },\n            \"checkin_today_count\": {\n                 \"check_in_count\": 1  // 当日签到数\n            },\n            \"balance_delegate\": {\n                \"address\": \"gea19f8g2yh3lyk0zx4m8tkl8na2gwnhc89manegh0\",    // 质押地址\n                \"coins\": [\n                    {\n                        \"denom\": \"ugea\",\n                        \"amount\": 9200000000   // 质押总量\n                    }\n                ]\n            },\n            \"current_occupy_ans\": 0.23   // ANS总量\n        },\n        {\n            \"region_id\": \"chn\",\n            \"kyc_count\": {\n                \"count\": 3\n            },\n            \"checkin_today_count\": null,\n            \"balance_delegate\": {\n                \"address\": \"gea1aq0srphrzmctqvg9j87ffefz2gc46znujyyr7w\",\n                \"coins\": [\n                    {\n                        \"denom\": \"ugea\",\n                        \"amount\": 13200000000\n                    }\n                ]\n            },\n            \"current_occupy_ans\": 0.33\n        },\n      \n      ...\n    ],\n    \"region_states_aggregate\": {\n      \"aggregate\": {\n        \"count\": 8   // 区域总数\n      }\n    }\n}\n```\n\n***"
+  definition:
+    query:
+      collection_name: allowed-queries
+      query_name: region.list
+  methods:
+    - GET
+  name: region.list
+  url: region/list
+- comment: |-
+    查询区的质押趋势，返回的数据中，单个数据是每月的质押情况
+    - 参数
+    - region_id: 必填，指定节点region_id
+    - before_time: 指定开始时间,例如 "2025-11-26 08:00:00.000 +0800"
+    - after_time: 指定结束时间: "2024-11-26 08:00:00.000 +0800"
+    - limit: 返回数据数量，默认12
+    - offset: 偏移量，默认0
+    - 请求方式：POST
+    - 请求地址：/api/rest/region/staking-trends
+    - 响应数据示例
+    ``` json
+    {
+        "staking_trends": [
+            {
+                "date": "2025-02",
+                "fixed_deposit_amount": {
+                    "denom": "ugea",
+                    "amount": 0
+                },
+                "delegate_amount": {
+                    "denom": "ugea",
+                    "amount": 0
+                },
+                "lock_up_amount": {
+                    "denom": "ugea",
+                    "amount": 0
+                },
+                "individual_equity_holdings": {
+                    "denom": "ugea",
+                    "amount": 0
+                }
+            },
+            {
+                "date": "2025-03",
+                "fixed_deposit_amount": {
+                    "denom": "ugea",
+                    "amount": 300000000
+                },
+                "delegate_amount": {
+                    "denom": "ugea",
+                    "amount": 700000000
+                },
+                "lock_up_amount": {
+                    "denom": "ugea",
+                    "amount": 0
+                },
+                "individual_equity_holdings": {
+                    "denom": "ugea",
+                    "amount": 600000000
+                }
+            }
+        ],
+        "staking_trends_aggregate": {
+            "aggregate": {
+                "count": 2
+            }
+        }
+    }
+    ```
+    **
+  definition:
+    query:
+      collection_name: allowed-queries
+      query_name: region.staking_trends
+  methods:
+    - POST
+  name: region.staking_trends
+  url: region/staking-trends
+- comment: |-
+    查询区的总计信息
+
+    ``` json
+    {
+        "region_count": {
+            "aggregate": {
+                "count": 10
+            }
+        },
+        "total_kyc_count": {
+            "aggregate": {
+                "sum": {
+                    "count": 6
+                }
+            }
+        },
+        "total_stake_count": {
+            "aggregate": {
+                "sum": {
+                    "current_demand_total_ugea": 317900000000
+                }
+            }
+        },
+        "fixed_count": {
+            "aggregate": {
+                "sum": {
+                    "current_fixed_delegation_total_ugea": 18600000000
+                }
+            }
+        },
+        "delegation_count": {
+            "aggregate": {
+                "sum": {
+                    "current_normal_delegation_total_ugea": 18200000000
+                }
+            }
+        },
+        "lock_up_count": {
+            "aggregate": {
+                "sum": {
+                    "current_lock_up_total_ugea": 212900000000
+                }
+            }
+        },
+        "total_stake_address_count": {
+            "aggregate": {
+                "count": 0
+            }
+        },
+        "delegation_address_count": {
+            "aggregate": {
+                "count": 0
+            }
+        },
+        "fixed_address_count": {
+            "aggregate": {
+                "count": 0
+            }
+        },
+        "lock_up_address_count": {
+            "aggregate": {
+                "count": 0
+            }
+        },
+        "total_ans_count": {
+            "aggregate": {
+                "sum": {
+                    "current_occupy_ans": 7.947500000000000000
+                }
+            }
+        }
+    }
+    ```
+  definition:
+    query:
+      collection_name: allowed-queries
+      query_name: region.statistic
+  methods:
+    - GET
+  name: region.statistic
+  url: region/statistic
+- comment: |-
+    ## 签到rollapp详情页
+    - 参数
+    - rollapp_id : rollapp的id,必填
+    - limit : 默认10，选填
+    - offset: 默认0 ，选填
+    - 返回数据示例
+    ``` json
+
+     {
+        "parsed_message": [
+          {
+            "tx_hash": "6ACCB5DE25656FF0D83B4148C4B37B1EF6CE88381FED0B4857C8A422CB6CD1D7",
+            "height": 30,
+            "creator": "me139mq752delxv78jvtmwxhasyrycufsvr0mue6u",
+            "created_at": "2024-12-31T06:28:31.956578+00:00"
+          }
+        ],
+        "update_states": [
+          {
+            "tx_hash": "E8164B57C73C77732636014D2D8DABE710DE749D737DADFC8A9A2CC07DAAEE4E",
+            "height": 4932,
+            "success": true,
+            "rollapp_id": "rollappevm_1234-1",
+            "start_height": 90,
+            "num_blocks": 1,
+            "created_at": "2024-12-31T09:07:20.925086+00:00",
+            "creator": "me1ry409f0xe6756wcv6q6epwd0sx3qxww8mmhtrf",
+            "sequencer": {
+              "status": "OPERATING_STATUS_BONDED"
+            }
+          }
+        ]
+      }
+
+    ```
+    **
+  definition:
+    query:
+      collection_name: allowed-queries
+      query_name: rollapp.detail
+  methods:
+    - GET
+  name: rollapp.detail
+  url: rollapp/detail
+- comment: "# 查询rollapp列表，列表按照rollapp-id asc排序\n- 参数： \n- limit 返回的个数\n- offset 偏移量\n\n- 返回数据示例\n``` json\n{\n  \"data\": {\n    \"rollapp_states\": [\n      {\n        \"rollapp_id\": \"rollappevm_1234-1\",\n        \"base_info\": {\n          \"rollapp\": {\n            \"creator\": \"me139mq752delxv78jvtmwxhasyrycufsvr0mue6u\",\n            \"rollappId\": \"rollappevm_1234-1\",\n            \"genesis_state\": {},\n            \"maxSequencers\": 1\n          },\n          \"latestStateIndex\": {\n            \"index\": 167,\n            \"rollappId\": \"rollappevm_1234-1\"\n          },\n          \"latestFinalizedStateIndex\": {\n            \"index\": 167,\n            \"rollappId\": \"rollappevm_1234-1\"\n          }\n        },\n        \"height\": 8095\n      }\n    ],\n    \"rollapp_states_aggregate\": {\n      \"aggregate\": {\n        \"count\": 1\n      }\n    }\n  }\n}\n```\n***"
+  definition:
+    query:
+      collection_name: allowed-queries
+      query_name: rollapp.list
+  methods:
+    - GET
+  name: rollapp.list
+  url: rollapp/list
+- comment: |-
+    ## 查询指定rollappID的seqencer列表
+    - 参数
+    - rollappID : rollapp的id,必填
+    - limit : 默认10，选填
+    - offset: 默认0 ，选填
+    - 返回数据示例
+    ``` json
+
+    {
+      "data": {
+        "sequencer_states": [
+          {
+            "sequencer_state": {
+              "jailed": false,
+              "status": "OPERATING_STATUS_BONDED",
+              "tokens": [
+                {
+                  "denom": "umec",
+                  "amount": "1000000"
+                }
+              ],
+              "proposer": true,
+              "rollappId": "rollappevm_1234-1",
+              "description": {
+                "details": "",
+                "moniker": "rolmoniker",
+                "website": "",
+                "identity": "",
+                "securityContact": ""
+              },
+              "unbond_time": "0001-01-01T00:00:00Z",
+              "dymintPubKey": {
+                "key": "628DoRL+vKpBDoDFH7SkInvEEBS+W7KoEkd9VqefUIo=",
+                "@type": "/cosmos.crypto.ed25519.PubKey"
+              },
+              "sequencerAddress": "me155glpel5zcp8kjmd8ctqhg4rlwnk8krrxrc2ml",
+              "unbonding_height": "0"
+            }
+          }
+        ]
+      }
+    }
+
+    ```
+    **
+  definition:
+    query:
+      collection_name: allowed-queries
+      query_name: rollapp.sequencers
+  methods:
+    - GET
+  name: rollapp.sequencers
+  url: rollapp/sequencers
+- comment: |-
+    ## 获取UpdateState交易列表
+    - 参数
+    - limit : 默认10，选填
+    - offset: 默认0 ，选填
+    -返回数据示例
+    ```Json
+    {
+        "rollapp_state_msgs": [
+          {
+            "created_at": "2024-12-31T06:28:37.048697+00:00",
+            "creator": "me1ry409f0xe6756wcv6q6epwd0sx3qxww8mmhtrf",
+            "height": 724,
+            "num_blocks": 23,
+            "rollapp_id": "rollappevm_1234-1",
+            "start_height": 1,
+            "success": true,
+            "tx_hash": "C3E1525D664D7D94CAE9C9816FAB68A4714280E80C000F7F3093AE732236CA60"
+          }
+        ]
+    }
+    ```
+
+    **
+  definition:
+    query:
+      collection_name: allowed-queries
+      query_name: rollapp.update_states_all
+  methods:
+    - GET
+  name: rollapp.update_states_all
+  url: rollapp/update-states
+- comment: |-
+    ## 根据rollapp_id获取UpdateState交易列表
+    - 参数
+    - rollapp_id: rollapp的ID，必填
+    - limit : 默认10，选填
+    - offset: 默认0 ，选填
+    -返回数据示例
+    ```Json
+    {
+        "rollapp_state_msgs": [
+          {
+            "created_at": "2024-12-31T06:28:37.048697+00:00",
+            "creator": "me1ry409f0xe6756wcv6q6epwd0sx3qxww8mmhtrf",
+            "height": 724,
+            "num_blocks": 23,
+            "rollapp_id": "rollappevm_1234-1",
+            "start_height": 1,
+            "success": true,
+            "tx_hash": "C3E1525D664D7D94CAE9C9816FAB68A4714280E80C000F7F3093AE732236CA60"
+          }
+        ],
+        "total_update_state_count": {
+          "aggregate": {
+            "count": 7
+          }
+        }
+      }
+    ```
+
+    **
+  definition:
+    query:
+      collection_name: allowed-queries
+      query_name: rollapp.update_states
+  methods:
+    - GET
+  name: rollapp.update_states
+  url: rollapp/update_states/:rollapp_id
+- comment: "## 查询转区信息\n- 参数\n- address ： 查询地址\n-返回数据示例\n```Json\n {\n    \"parsed_message\": [\n      {\n        \"tx_hash\": \"3EC2E3A5EA123286F570C8F0195DC06A5A4B7486DCA8019C08C2C19E0A620869\",\n        \"transfer_region\": {\n          \"sender\": \"me139mq752delxv78jvtmwxhasyrycufsvr0mue6u\",\n          \"rewards\": \"100000000umec\",\n          \"to_region\": \"me_earth\",\n          \"from_region\": \"usa\",\n          \"transfer_address\": \"me1s63v3umtxa9fdj8kz395flgqwumrfvyv2kg5ps\"\n        },\n        \"height\": 3840,\n        \"transaction\": {\n          \"logs\": [\n            {\n              \"events\": [\n                {\n                  \"type\": \"transfer_region\",\n                  \"attributes\": [\n                    {\n                      \"key\": \"sender\",\n                      \"value\": \"me139mq752delxv78jvtmwxhasyrycufsvr0mue6u\"\n                    },\n                    {\n                      \"key\": \"transfer_address\",\n                      \"value\": \"me1s63v3umtxa9fdj8kz395flgqwumrfvyv2kg5ps\"\n                    },\n                    {\n                      \"key\": \"from_region\",\n                      \"value\": \"usa\"\n                    },\n                    {\n                      \"key\": \"to_region\",\n                      \"value\": \"me_earth\"\n                    },\n                    {\n                      \"key\": \"rewards\",\n                      \"value\": \"100000000umec\"\n                    }\n                  ]\n                }\n                \n              ],\n              \"msg_index\": 0\n            }\n          ],\n          \"block\": {\n            \"timestamp\": \"2025-01-07T07:58:16.224374\"\n          }\n        }\n      }\n    ]\n  }\n```\n\n**"
+  definition:
+    query:
+      collection_name: allowed-queries
+      query_name: transfer_region
+  methods:
+    - GET
+  name: transfer_region
+  url: transfer-region/:address
+- comment: |-
+    ## 签到rollapp详情页
+    - 参数
+    - rollapp_id : rollapp的id,必填
+    - limit : 默认10，选填
+    - offset: 默认0 ，选填
+    - 响应
+    - sequencer_infos: 排序器列表，根据update_states中的hash,height,create,sequencer.status组成
+    - 返回数据示例
+    ``` json
+
+     {
+        "parsed_message": [
+          {
+            "tx_hash": "6ACCB5DE25656FF0D83B4148C4B37B1EF6CE88381FED0B4857C8A422CB6CD1D7",
+            "height": 30,
+            "creator": "me139mq752delxv78jvtmwxhasyrycufsvr0mue6u",
+            "created_at": "2024-12-31T06:28:31.956578+00:00"
+          }
+        ],
+        "update_states": [
+          {
+            "tx_hash": "E8164B57C73C77732636014D2D8DABE710DE749D737DADFC8A9A2CC07DAAEE4E",
+            "height": 4932,
+            "success": true,
+            "rollapp_id": "rollappevm_1234-1",
+            "start_height": 90,
+            "num_blocks": 1,
+            "created_at": "2024-12-31T09:07:20.925086+00:00",
+            "creator": "me1ry409f0xe6756wcv6q6epwd0sx3qxww8mmhtrf",
+            "sequencer": {
+              "status": "OPERATING_STATUS_BONDED"
+            }
+          }
+        ]
+      }
+
+    ```
+
+    **
+  definition:
+    query:
+      collection_name: allowed-queries
+      query_name: tx_info
+  methods:
+    - GET
+  name: tx_info
+  url: tx-info
+- comment: "查询指定地址在指定交易中的资产变化\n\n返回结果示例 \n\n``` json\n{\n    \"asset_change_logs\": [\n      {\n        \"address\": \"me1ja4vgnavpdllv2dpg5yc55j5gl5l4k0lrk60n8\",\n        \"before_change\": [\n          {\n            \"denom\": \"umec\",\n            \"amount\": 0\n          }\n        ],\n        \"change\": [\n          {\n            \"denom\": \"umec\",\n            \"amount\": 1\n          }\n        ],\n        \"after_change\": [\n          {\n            \"denom\": \"umec\",\n            \"amount\": 1\n          }\n        ],\n        \"height\": 2599,\n        \"tx_hash\": \"B679A8ED53E6151A7AA4F186DD0A2021637BCCDD0D606072B2BE63E05E7B7F0B\",\n        \"trigger_by\": \"{cosmos.bank.v1beta1.MsgSend}\"\n      }\n    ]\n  }\n```\n\n--"
+  definition:
+    query:
+      collection_name: allowed-queries
+      query_name: tx.asset_change_log
+  methods:
+    - POST
+  name: tx.asset_change_log
+  url: tx/asset_change_log
+- comment: |-
+    ## 查询hub网络交易详情
+    根据交易哈希查询hub网络交易详情
+    - 请求方式：get
+    - 请求路径：/api/rest/tx/detail/:hash
+    - 请求参数：hash: 交易哈希
+
+    **
+  definition:
+    query:
+      collection_name: allowed-queries
+      query_name: tx.detail
+  methods:
+    - GET
+  name: tx.detail
+  url: tx/detail/:hash
+- comment: "查询IBC转账列表 按所在区块高度desc排序\n参数：\n- limit: 默认10\n- offset: 默认0\n\n 返回示例：\n``` json\n{\n    \"ibc_transfer_records\": [\n      {\n        \"tx_hash\": \"2825E4A28DA8A03FD71E09342351D6EAE29F3318F3DBC6E1F86C155551E891AE\",\n        \"coin\": {\n          \"denom\": \"urax\",\n          \"amount\": 11111\n        },\n        \"sender\": \"me1mqrlfm3myaxcxhvrj7acqhx5vtfvqffyljr362\",\n        \"receiver\": \"me13d2zxu3dmw2rpzdlsy62gmj209rkaps6uxv2ga\",\n        \"transfer_type\": \"receive\",\n        \"source_port\": \"transfer\", //源ibc path =source_channel+source_port\n        \"source_channel\": \"channel-0\",\n        \"destination_port\": \"transfer\", //目标ibc path =destination_channel+destination_port\n        \"destination_channel\": \"channel-0\",\n        \"time\": {\n          \"timestamp\": \"2025-01-04T03:51:07.650086\"\n        },\n        \"status\": {\n          \"success\": true\n        }\n      }\n    ],\n    \"ibc_transfer_records_aggregate\": {\n      \"aggregate\": {\n        \"count\": 9\n      }\n    }\n  }\n```\n  \n**"
+  definition:
+    query:
+      collection_name: allowed-queries
+      query_name: tx.ibc.transfer.list
+  methods:
+    - GET
+  name: tx.ibc.transfer.list
+  url: tx/ibc/transfer/list
+- comment: "查询交易列表，按所在区块高度desc排序\n参数：\n- limit: 默认10\n- offset: 默认0\n\n  \n\n**"
+  definition:
+    query:
+      collection_name: allowed-queries
+      query_name: tx.list
+  methods:
+    - GET
+  name: tx.list
+  url: tx/list
+- comment: |-
+    ## 获取交易raw_log
+    @author JFJun
+    - 参数
+    - hash: 查询的交易hash，必填
+    -返回数据示例
+    ```Json
+    {
+        "data": [
+          {
+            "raw_log": "[{\"msg_index\":0,\"events\":[{\"type\":\"message\",\"attributes\":[{\"key\":\"action\",\"value\":\"/gea.staking.MsgCreateLockUpDelegate\"},{\"key\":\"sender\",\"value\":\"gea16hhyy8e2rcnkjq488sy2su3gz5q0pk2vxdmjpx\"},{\"key\":\"module\",\"value\":\"staking\"}]},{\"type\":\"coin_spent\",\"attributes\":[{\"key\":\"spender\",\"value\":\"gea16hhyy8e2rcnkjq488sy2su3gz5q0pk2vxdmjpx\"},{\"key\":\"amount\",\"value\":\"100000000ugea\"}]},{\"type\":\"coin_received\",\"attributes\":[{\"key\":\"receiver\",\"value\":\"gea1aq0srphrzmctqvg9j87ffefz2gc46znujyyr7w\"},{\"key\":\"amount\",\"value\":\"100000000ugea\"}]},{\"type\":\"delegate_coins\",\"attributes\":[{\"key\":\"delegator_address\",\"value\":\"gea16hhyy8e2rcnkjq488sy2su3gz5q0pk2vxdmjpx\"},{\"key\":\"region_delegation_address\",\"value\":\"gea1aq0srphrzmctqvg9j87ffefz2gc46znujyyr7w\"},{\"key\":\"amount\",\"value\":\"100000000ugea\"}]},{\"type\":\"coin_spent\",\"attributes\":[{\"key\":\"spender\",\"value\":\"gea1hfsh9t5n7r4y390je7us9z9z39ypqswnk8t0fe\"},{\"key\":\"amount\",\"value\":\"4119ugag,4119ugea\"}]},{\"type\":\"coin_received\",\"attributes\":[{\"key\":\"receiver\",\"value\":\"gea16hhyy8e2rcnkjq488sy2su3gz5q0pk2vxdmjpx\"},{\"key\":\"amount\",\"value\":\"4119ugag,4119ugea\"}]},{\"type\":\"transfer\",\"attributes\":[{\"key\":\"recipient\",\"value\":\"gea16hhyy8e2rcnkjq488sy2su3gz5q0pk2vxdmjpx\"},{\"key\":\"sender\",\"value\":\"gea1hfsh9t5n7r4y390je7us9z9z39ypqswnk8t0fe\"},{\"key\":\"amount\",\"value\":\"4119ugag,4119ugea\"},{\"key\":\"tag\",\"value\":\"SendCoinsFromRegionVault_SendRegionVaultToReceiver_chn\"}]},{\"type\":\"message\",\"attributes\":[{\"key\":\"sender\",\"value\":\"gea1hfsh9t5n7r4y390je7us9z9z39ypqswnk8t0fe\"}]},{\"type\":\"delegate_interest_info\",\"attributes\":[{\"key\":\"interest\",\"value\":\"4119.103020000000000000\"},{\"key\":\"region_id\",\"value\":\"chn\"},{\"key\":\"delegation_interest\",\"value\":\"1373.034340000000000000\"},{\"key\":\"kyc_interest\",\"value\":\"1373.034340000000000000\"},{\"key\":\"fixed_interest\",\"value\":\"1373.034340000000000000\"},{\"key\":\"lock_up_interest\",\"value\":\"0.000000000000000000\"}]},{\"type\":\"do_delegate\",\"attributes\":[{\"key\":\"delegator_address\",\"value\":\"gea16hhyy8e2rcnkjq488sy2su3gz5q0pk2vxdmjpx\"},{\"key\":\"amount\",\"value\":\"100000000ugea\"},{\"key\":\"region_id\",\"value\":\"chn\"},{\"key\":\"fixed_deposit_term\",\"value\":\"TERM_LockUp\"},{\"key\":\"interest\",\"value\":\"4119.103020000000000000\"}]},{\"type\":\"create_lock_up_delegation\",\"attributes\":[{\"key\":\"lock_up_id\",\"value\":\"0\"},{\"key\":\"delegator_address\",\"value\":\"gea16hhyy8e2rcnkjq488sy2su3gz5q0pk2vxdmjpx\"},{\"key\":\"region_id\",\"value\":\"chn\"},{\"key\":\"lock_up_interest_term\",\"value\":\"10\"},{\"key\":\"lock_up_principal_term\",\"value\":\"30\"},{\"key\":\"amount\",\"value\":\"100000000ugea\"},{\"key\":\"create_time\",\"value\":\"2025-04-24 09:27:00.271761513 +0000 UTC\"}]}]}]"
+          }
+        ]
+      }
+    ```
+
+    **
+  definition:
+    query:
+      collection_name: allowed-queries
+      query_name: tx.get_tx_raw_log
+  methods:
+    - GET
+  name: tx.get_tx_raw_log
+  url: tx/raw-log
+- comment: ""
+  definition:
+    query:
+      collection_name: allowed-queries
+      query_name: user_total_balance
+  methods:
+    - GET
+  name: user_total_balance
+  url: user-total-balance
+- comment: |-
+    @author: Jack
+
+    查询验证节点详情
+
+    - 请求方式: POST
+    - 请求参数：{operator_address}   节点ID（节点操作地址）
+    - 请求url：/api/rest/validator/{operator_address}
+    - 返回示例
+
+    ``` json
+    {
+        "validator_info": [
+            {
+                "operator_address": "geavaloper1ny6l255s5j2q9mudukjkxggf95ea3nnd0jtxw2",   // 节点ID（操作地址）
+                "consensus_address": "geavalcons1ugd78sezdqrw86dllxakhspxezuwwgt2293en6",  // 节点出块地址
+                "voting_power": {
+                    "power": 100000000 // 权重
+                },
+                "description": {
+                    "moniker": "USA-node" // 节点名称
+                },
+                "status": {
+                    "status": 3,  // 节点状态
+                    "jailed": false
+                }
+            }
+        ],
+        "validator_voting_power_aggregate": {
+            "aggregate": {
+              "sum": {
+                "voting_power": 400000000  // 所有节点的总权重
+              }
+            }
+        }
+    }
+    ```
+
+    **
+  definition:
+    query:
+      collection_name: allowed-queries
+      query_name: validator.detail
+  methods:
+    - POST
+  name: validator.detail
+  url: validator/:operator_address
+- comment: "查询指定节点的区块，按高度desc排序\n- 参数\n- consensus_address: 必填\n- limit: 默认10\n- offset 默认0\n- 返回数据示例\n``` json\n{\n    \"block\": [\n        {\n            \"hash\": \"4F3A04146DDF5345170E5E6FF4C17AF0BFCDEDE0E6774F23BD2A58758AC93E4C\",\n            \"height\": 97898,\n            \"reward\": \"6341960000ugea,2536784000000ugag\", \n            \"total_gas\": 0,\n            \"timestamp\": \"2025-03-11T11:35:27.192581\",\n            \"proposer_address\": \"geavalcons1ugd78sezdqrw86dllxakhspxezuwwgt2293en6\",\n            \"num_txs\": 0,\n            \"gas_fee\": null\n        },\n        {\n            \"hash\": \"BC48489EB2CC3CC0827BBD1E032790D98282A2A56D41FBB7602B6DCD45D1AEB8\",\n            \"height\": 97894,\n            \"reward\": \"6341960000ugea,2536784000000ugag\", \n            \"total_gas\": 0,\n            \"timestamp\": \"2025-03-11T11:35:05.466523\",\n            \"proposer_address\": \"geavalcons1ugd78sezdqrw86dllxakhspxezuwwgt2293en6\",\n            \"num_txs\": 0,\n            \"gas_fee\": null\n        }\n    ],\n    \"block_aggregate\": {\n        \"aggregate\": {\n            \"count\": 97872\n        }\n    }\n}\n```\n\n**"
+  definition:
+    query:
+      collection_name: allowed-queries
+      query_name: validator.blocks
+  methods:
+    - GET
+  name: validator.blocks
+  url: validator/blocks
+- comment: |-
+    @author: Jack
+
+    获取验证节点列表，返回节点名称、节点ID、节点状态和节点权重等信息，默认根据voting_power降序排序
+
+    - 返回示例
+
+    ``` json
+    {
+        "validator_info": [
+            {
+                "operator_address": "geavaloper1ny6l255s5j2q9mudukjkxggf95ea3nnd0jtxw2",  // 节点ID（节点操作地址）
+                "consensus_address": "geavalcons1ugd78sezdqrw86dllxakhspxezuwwgt2293en6", // 节点出块地址
+                "voting_power": {
+                    "power": 100000000  // 节点权重
+                },
+                "description": {
+                    "moniker": "USA-node"  // 节点名称
+                },
+                "status": {
+                    "status": 3,  // 节点状态
+                    "jailed": false
+                }
+            },
+            {
+                "operator_address": "geavaloper12g0y6m8hmfkcy6c48xeqc230het6lanw4al3qd",
+                "consensus_address": "geavalcons1t4lcgctraukmj0nz6ygedf9z4ljs99cjx45eu5",
+                "voting_power": {
+                    "power": 100000000
+                },
+                "description": {
+                    "moniker": "Global-node"
+                },
+                "status": {
+                    "status": 3,
+                    "jailed": false
+                }
+            }
+        ],
+        "validator_info_aggregate": {
+            "aggregate": {
+                "count": 4  // 节点总个数
+            }
+        },
+        "validator_voting_power_aggregate": {
+          "aggregate": {
+            "sum": {
+              "voting_power": 400000000   // 所有节点总的权重
+            }
+          }
+        }
+    }
+    ```
+
+    **
+  definition:
+    query:
+      collection_name: allowed-queries
+      query_name: validator.list
+  methods:
+    - GET
+  name: validator.list
+  url: validator/list
+- comment: |-
+    ## 获取用户置换交易列表
+    @author JFJun
+    - 参数
+    - address: 查询的地址，必填
+    - offset : 默认0
+    - limit: 默认10
+    -返回数据示例
+    ```Json
+    {
+        "list": [
+          {
+            "hash": "1897038BF651F30EA16FEEBFCA61A45BB3147C9EC6A1432B5D1BFEF6953FB389", // 交易hash
+            "status": {
+              "success": true		// 交易状态
+            },
+            "detail": {		// 详情
+              "swap_address": "gea1jxr80e6dnjvf8529fjgem66zxr0xtd8rrjpq3r",	// 置换池地址
+              "address": "gea16hhyy8e2rcnkjq488sy2su3gz5q0pk2vxdmjpx",	// 用户地址
+              "from_amount": "100000000ugea",	// 置换 from金额
+              "to_amount": "40000000000ugag"	//置换  to金额
+            },
+            "block": {
+              "timestamp": "2025-04-24T06:39:47.221786+00:00"	// 交易时间
+            }
+          }
+        ],
+        "total_count": {	// 交易总数
+          "aggregate": {
+            "count": 1
+          }
+        }
+      }
+    ```
+    **
+  definition:
+    query:
+      collection_name: allowed-queries
+      query_name: swap.get_account_swap_list
+  methods:
+    - GET
+  name: swap.get_account_swap_list
+  url: wallet/swap/list

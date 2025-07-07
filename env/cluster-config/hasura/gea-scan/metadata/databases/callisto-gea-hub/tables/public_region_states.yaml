@@ -1,0 +1,149 @@
+table:
+  name: region_states
+  schema: public
+object_relationships:
+  - name: all_delegation_total_ugea
+    using:
+      manual_configuration:
+        column_mapping:
+          region_id: region_id
+        insertion_order: null
+        remote_table:
+          name: region_states_with_all_delegation
+          schema: public
+  - name: balance_base_account
+    using:
+      manual_configuration:
+        column_mapping:
+          base_account: address
+        insertion_order: null
+        remote_table:
+          name: balance_states
+          schema: public
+  - name: balance_delegate
+    using:
+      manual_configuration:
+        column_mapping:
+          delegation_address: address
+        insertion_order: null
+        remote_table:
+          name: balance_states
+          schema: public
+  - name: balance_gas_fee
+    using:
+      manual_configuration:
+        column_mapping:
+          region_gas_fee_account: address
+        insertion_order: null
+        remote_table:
+          name: balance_states
+          schema: public
+  - name: balance_interest
+    using:
+      manual_configuration:
+        column_mapping:
+          fixed_delegation_account: address
+        insertion_order: null
+        remote_table:
+          name: balance_states
+          schema: public
+  - name: balance_kyc_invite
+    using:
+      manual_configuration:
+        column_mapping:
+          kyc_invite_pool: address
+        insertion_order: null
+        remote_table:
+          name: balance_states
+          schema: public
+  - name: balance_kyc_vault
+    using:
+      manual_configuration:
+        column_mapping:
+          kyc_vault_address: address
+        insertion_order: null
+        remote_table:
+          name: balance_states
+          schema: public
+  - name: balance_operator
+    using:
+      manual_configuration:
+        column_mapping:
+          operator_address: address
+        insertion_order: null
+        remote_table:
+          name: balance_states
+          schema: public
+  - name: balance_states
+    using:
+      manual_configuration:
+        column_mapping:
+          base_account: address
+        insertion_order: null
+        remote_table:
+          name: balance_states
+          schema: public
+  - name: balance_swap_pool
+    using:
+      manual_configuration:
+        column_mapping:
+          swap_pool: address
+        insertion_order: null
+        remote_table:
+          name: balance_states
+          schema: public
+  - name: checkin_count
+    using:
+      manual_configuration:
+        column_mapping:
+          region_id: region_id
+        insertion_order: null
+        remote_table:
+          name: checkin_count_view
+          schema: rollapp_checkin
+  - name: checkin_today_count
+    using:
+      manual_configuration:
+        column_mapping:
+          region_id: region_id
+        insertion_order: null
+        remote_table:
+          name: checkin_today_count_view
+          schema: rollapp_checkin
+  - name: kyc_count
+    using:
+      manual_configuration:
+        column_mapping:
+          region_id: region_id
+        insertion_order: null
+        remote_table:
+          name: kyc_count_view
+          schema: public
+  - name: liquidity
+    using:
+      manual_configuration:
+        column_mapping:
+          region_id: region_id
+        insertion_order: null
+        remote_table:
+          name: region_liquidity_view
+          schema: public
+  - name: validator_description
+    using:
+      manual_configuration:
+        column_mapping:
+          region_id: region_id
+        insertion_order: null
+        remote_table:
+          name: validator_description
+          schema: public
+array_relationships:
+  - name: governance_community_accounts
+    using:
+      manual_configuration:
+        column_mapping:
+          region_id: region_id
+        insertion_order: null
+        remote_table:
+          name: governance_community_accounts
+          schema: public

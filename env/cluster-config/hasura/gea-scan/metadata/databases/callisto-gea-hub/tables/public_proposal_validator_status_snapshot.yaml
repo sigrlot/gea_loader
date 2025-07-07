@@ -1,0 +1,3 @@
+table:
+  name: proposal_validator_status_snapshot
+  schema: public

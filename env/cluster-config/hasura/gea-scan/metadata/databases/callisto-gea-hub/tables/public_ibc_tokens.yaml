@@ -1,0 +1,13 @@
+table:
+  name: ibc_tokens
+  schema: public
+object_relationships:
+  - name: count
+    using:
+      manual_configuration:
+        column_mapping:
+          denom: denom
+        insertion_order: null
+        remote_table:
+          name: ibc_token_count
+          schema: public

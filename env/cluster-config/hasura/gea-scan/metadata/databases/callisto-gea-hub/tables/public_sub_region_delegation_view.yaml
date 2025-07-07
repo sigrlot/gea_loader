@@ -1,0 +1,3 @@
+table:
+  name: sub_region_delegation_view
+  schema: public

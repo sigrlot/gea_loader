@@ -1,0 +1,3 @@
+table:
+  name: rollapp_states
+  schema: public

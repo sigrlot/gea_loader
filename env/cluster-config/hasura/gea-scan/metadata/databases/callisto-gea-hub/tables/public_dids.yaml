@@ -1,0 +1,69 @@
+table:
+  name: dids
+  schema: public
+object_relationships:
+  - name: current_region_delegate
+    using:
+      manual_configuration:
+        column_mapping:
+          address: address
+          region_id: region_id
+        insertion_order: null
+        remote_table:
+          name: staking_counts
+          schema: public
+  - name: nfts
+    using:
+      manual_configuration:
+        column_mapping:
+          did: id
+        insertion_order: null
+        remote_table:
+          name: nfts
+          schema: public
+  - name: region_delegate_summary
+    using:
+      manual_configuration:
+        column_mapping:
+          region_id: region_id
+        insertion_order: null
+        remote_table:
+          name: region_delegation_view
+          schema: public
+  - name: region_state
+    using:
+      manual_configuration:
+        column_mapping:
+          region_id: region_id
+        insertion_order: null
+        remote_table:
+          name: region_states
+          schema: public
+  - name: sub_region_delegate_summary
+    using:
+      manual_configuration:
+        column_mapping:
+          approve_region_id: approve_region_id
+        insertion_order: null
+        remote_table:
+          name: sub_region_delegation_view
+          schema: public
+array_relationships:
+  - name: all_delegates
+    using:
+      manual_configuration:
+        column_mapping:
+          address: address
+        insertion_order: null
+        remote_table:
+          name: staking_counts
+          schema: public
+  - name: credentials
+    using:
+      manual_configuration:
+        column_mapping:
+          did: did
+        insertion_order: null
+        remote_table:
+          name: credentials
+          schema: public

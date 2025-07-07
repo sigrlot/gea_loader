@@ -1,0 +1,1211 @@
+# Generated with protoc-gen-openapi
+# https://github.com/google/gnostic/tree/master/cmd/protoc-gen-openapi
+
+openapi: 3.0.3
+info:
+    title: ""
+    version: 0.0.1
+paths:
+    /api/account/addresses_balances:
+        post:
+            tags:
+                - Account
+            operationId: Account_GetBalances
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/BalancesRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/BalancesResponse'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /api/account/agd_delegate:
+        get:
+            tags:
+                - Account
+            operationId: Account_GetAGDDelegate
+            parameters:
+                - name: address
+                  in: query
+                  schema:
+                    type: string
+                - name: pageNumber
+                  in: query
+                  schema:
+                    type: string
+                - name: pageSize
+                  in: query
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/AGDDelegateResponse'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /api/account/age_delegate:
+        get:
+            tags:
+                - Account
+            operationId: Account_GetAGEDelegate
+            parameters:
+                - name: address
+                  in: query
+                  schema:
+                    type: string
+                - name: pageNumber
+                  in: query
+                  schema:
+                    type: string
+                - name: pageSize
+                  in: query
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/AGEDelegateResponse'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /api/account/ags_delegate:
+        get:
+            tags:
+                - Account
+            operationId: Account_GetAGSDelegate
+            parameters:
+                - name: address
+                  in: query
+                  schema:
+                    type: string
+                - name: pageNumber
+                  in: query
+                  schema:
+                    type: string
+                - name: pageSize
+                  in: query
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/AGSDelegateResponse'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /api/account/detail:
+        get:
+            tags:
+                - Account
+            operationId: Account_Detail
+            parameters:
+                - name: address
+                  in: query
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/DetailReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /api/account/update_governance_address:
+        post:
+            tags:
+                - RegionAddress
+            description: |-
+                更新区域治理奖励金库地址
+                 @author: jack
+                 @date: 2025-05-07 17:58:29
+            operationId: RegionAddress_UpdateGovernanceAddress
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/UpdateGovernanceAddressRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/UpdateGovernanceAddressResponse'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /api/address/region/update:
+        put:
+            tags:
+                - Address
+            description: |-
+                更新区域奖励地址
+                 @author: jfjun
+                 @date: 2025-02-21 17:28:09
+            operationId: Address_UpdateRegionRewardAddress
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/UpdateRegionRewardAddressRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/UpdateRegionRewardAddressReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /api/bank/liquidity:
+        get:
+            tags:
+                - Bank
+            operationId: Bank_GetLiquidity
+            parameters:
+                - name: regionId
+                  in: query
+                  schema:
+                    type: string
+                - name: denom
+                  in: query
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/GetLiquidityReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /api/bank/mec_liquidity:
+        get:
+            tags:
+                - Bank
+            operationId: Bank_GetMECLiquidity
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/GetMECLiquidityReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /api/browser/account/detail:
+        get:
+            tags:
+                - Browser
+            operationId: Browser_GetAccountDetail
+            parameters:
+                - name: address
+                  in: query
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/BrowserReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /api/browser/account/getAccountAuthInfo:
+        get:
+            tags:
+                - Browser
+            operationId: Browser_GetAccountAuthInfo
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/GetAccountAuthInfoReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /api/browser/checkIn/info:
+        get:
+            tags:
+                - Browser
+            operationId: Browser_GetCheckInInfo
+            parameters:
+                - name: day
+                  in: query
+                  schema:
+                    type: string
+                - name: month
+                  in: query
+                  schema:
+                    type: string
+                - name: year
+                  in: query
+                  schema:
+                    type: string
+                - name: address
+                  in: query
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/BrowserReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /api/browser/kyc/info:
+        get:
+            tags:
+                - Browser
+            operationId: Browser_GetKycInfo
+            parameters:
+                - name: day
+                  in: query
+                  schema:
+                    type: string
+                - name: month
+                  in: query
+                  schema:
+                    type: string
+                - name: year
+                  in: query
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/BrowserReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /api/delegation/delegation_detail:
+        get:
+            tags:
+                - Delegation
+            description: |-
+                质押详情——小程序
+                 @author: jack
+                 @date: 2025-05-15
+            operationId: Delegation_GetDelegationDetail
+            parameters:
+                - name: address
+                  in: query
+                  schema:
+                    type: string
+                - name: regionId
+                  in: query
+                  schema:
+                    type: string
+                - name: delegationType
+                  in: query
+                  schema:
+                    type: string
+                - name: orderId
+                  in: query
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/GetDelegationDetailResponse'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /api/delegation/delegation_detail_record:
+        get:
+            tags:
+                - Delegation
+            description: |-
+                质押详细记录——中台
+                 @author: jack
+                 @date: 2025-05-15
+            operationId: Delegation_GetDelegationDetailRecord
+            parameters:
+                - name: address
+                  in: query
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/GetDelegationDetailRecordResponse'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /api/delegation/delegation_info:
+        get:
+            tags:
+                - Delegation
+            description: |-
+                质押总览——小程序
+                 @author: jack
+                 @date: 2025-05-15
+            operationId: Delegation_GetDelegationInfo
+            parameters:
+                - name: address
+                  in: query
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/GetDelegationInfoResponse'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /api/delegation/delegation_record:
+        get:
+            tags:
+                - Delegation
+            description: |-
+                质押记录——小程序
+                 @author: jack
+                 @date: 2025-05-15
+            operationId: Delegation_GetDelegationRecord
+            parameters:
+                - name: address
+                  in: query
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/GetDelegationRecordResponse'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /api/home/tx/count:
+        get:
+            tags:
+                - Home
+            description: |-
+                获取交易数量
+                 @author: jfjun
+                 @date: 2025-02-21 17:28:21
+            operationId: Home_GetTxCount
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/GetTxCountReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /api/region/detail:
+        get:
+            tags:
+                - Region
+            operationId: Region_Detail
+            parameters:
+                - name: regionId
+                  in: query
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/RegionDetailResponse'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /api/region/lockup_withdrawable_amount:
+        get:
+            tags:
+                - Region
+            description: |-
+                获取区灵活锁仓本金可提取额度
+                @author: Jack
+                @date: 2025-06-12 13:55:28
+            operationId: Region_LockupWithdrawableAmount
+            parameters:
+                - name: regionId
+                  in: query
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/LockupWithdrawableAmountResponse'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /api/rollapp/list:
+        get:
+            tags:
+                - RollApp
+            operationId: RollApp_GetRollAppList
+            parameters:
+                - name: offset
+                  in: query
+                  schema:
+                    type: string
+                - name: limit
+                  in: query
+                  schema:
+                    type: string
+                - name: sequencersNums
+                  in: query
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/GetRollAppListReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /api/tx/send:
+        put:
+            tags:
+                - Tx
+            description: |-
+                发送交易
+                 @author: jfjun
+                 @date: 2025-02-21 17:30:25
+            operationId: Tx_SendTransaction
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/SendTransactionRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/SendTransactionReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /api/tx/status/{txHash}:
+        get:
+            tags:
+                - Tx
+            description: |-
+                获取交易状态
+                 @author: jfjun
+                 @date: 2025-02-21 17:30:33
+            operationId: Tx_GetTransactionStatus
+            parameters:
+                - name: txHash
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/GetTransactionStatusReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /api/wallet/home:
+        get:
+            tags:
+                - Wallet
+            operationId: Wallet_GetHomeInfo
+            parameters:
+                - name: address
+                  in: query
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/GetHomeInfoReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+components:
+    schemas:
+        AGDDelegateResponse:
+            type: object
+            properties:
+                agdDelegation:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/Delegation'
+                total:
+                    type: string
+        AGEDelegateResponse:
+            type: object
+            properties:
+                ageDelegation:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/LockupDelegation'
+                total:
+                    type: string
+        AGSDelegateResponse:
+            type: object
+            properties:
+                agsDelegation:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/FixedDelegation'
+                total:
+                    type: string
+        AddressInfo:
+            type: object
+            properties:
+                name:
+                    type: string
+                address:
+                    type: string
+                ugeaAmount:
+                    type: string
+        BalanceInfo:
+            type: object
+            properties:
+                amount:
+                    type: string
+                baseAmount:
+                    type: string
+                denom:
+                    type: string
+        Balances:
+            type: object
+            properties:
+                address:
+                    type: string
+                hubCoins:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/Coin'
+        BalancesRequest:
+            type: object
+            properties:
+                addresses:
+                    type: array
+                    items:
+                        type: string
+        BalancesResponse:
+            type: object
+            properties:
+                balances:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/Balances'
+        BrowserReply:
+            type: object
+            properties:
+                code:
+                    type: string
+                message:
+                    type: string
+                data:
+                    $ref: '#/components/schemas/GoogleProtobufAny'
+        Coin:
+            type: object
+            properties:
+                Denom:
+                    type: string
+                Amount:
+                    type: string
+        DelegateCount:
+            type: object
+            properties:
+                agdAmount:
+                    type: string
+                ageAmount:
+                    type: string
+                agsAmount:
+                    type: string
+                withdrawableReward:
+                    type: string
+        Delegation:
+            type: object
+            properties:
+                regionId:
+                    type: string
+                amount:
+                    type: string
+                interestAmount:
+                    type: string
+                delegationType:
+                    type: string
+                startTime:
+                    type: string
+        DelegationDetailRecord:
+            type: object
+            properties:
+                regionId:
+                    type: string
+                delegationType:
+                    type: string
+                amount:
+                    type: string
+                orderId:
+                    type: string
+                orderTerm:
+                    type: string
+                orderCreateTime:
+                    type: string
+                AGDInterest:
+                    type: string
+                AGEInterest:
+                    type: string
+                AGSInterest:
+                    type: string
+                AGEInterestEndTime:
+                    type: string
+                principalEndTime:
+                    type: string
+        DelegationRecord:
+            type: object
+            properties:
+                regionId:
+                    type: string
+                delegationType:
+                    type: string
+                amount:
+                    type: string
+                generatingInterest:
+                    type: boolean
+                orderId:
+                    type: string
+        DetailReply:
+            type: object
+            properties:
+                address:
+                    type: string
+                regionId:
+                    type: string
+                starLevel:
+                    type: integer
+                    format: int32
+                UgeaAmount:
+                    type: string
+                UgagAmount:
+                    type: string
+                TotalAns:
+                    type: string
+                did:
+                    type: string
+                inviter:
+                    type: string
+                delegateCount:
+                    $ref: '#/components/schemas/DelegateCount'
+                isModuleAccount:
+                    type: boolean
+                name:
+                    type: string
+                description:
+                    type: string
+        FixedDelegation:
+            type: object
+            properties:
+                id:
+                    type: string
+                regionId:
+                    type: string
+                amount:
+                    type: string
+                interestAmount:
+                    type: string
+                startTime:
+                    type: string
+                endTime:
+                    type: string
+                term:
+                    type: string
+        FixedDetail:
+            type: object
+            properties:
+                AGSInterest:
+                    type: string
+                orderTerm:
+                    type: string
+                orderCreateTime:
+                    type: string
+                orderEndTime:
+                    type: string
+        GetAccountAuthInfoReply:
+            type: object
+            properties: {}
+        GetDelegationDetailRecordResponse:
+            type: object
+            properties:
+                delegationDetailRecord:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/DelegationDetailRecord'
+        GetDelegationDetailResponse:
+            type: object
+            properties:
+                amount:
+                    type: string
+                AGDInterest:
+                    type: string
+                orderCreateTime:
+                    type: string
+                lockupDetail:
+                    $ref: '#/components/schemas/LockupDetail'
+                fixedDetail:
+                    $ref: '#/components/schemas/FixedDetail'
+        GetDelegationInfoResponse:
+            type: object
+            properties:
+                totalDelegation:
+                    type: string
+                totalReward:
+                    type: string
+                totalWithdrawableReward:
+                    type: string
+                withdrawableDelegationReward:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/WithdrawableDelegationReward'
+        GetDelegationRecordResponse:
+            type: object
+            properties:
+                delegationRecord:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/DelegationRecord'
+        GetHomeInfoReply:
+            type: object
+            properties:
+                address:
+                    type: string
+                balances:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/BalanceInfo'
+                totalStakingAmount:
+                    type: string
+                staking:
+                    $ref: '#/components/schemas/StakingInfo'
+        GetLiquidityReply:
+            type: object
+            properties:
+                totalProduce:
+                    type: string
+                totalLiquidity:
+                    type: string
+                denom:
+                    type: string
+                totalTreasureAmount:
+                    type: string
+                regionLiquidity:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/RegionLiquidityData'
+        GetMECLiquidityReply:
+            type: object
+            properties:
+                liquidity:
+                    type: string
+                totalTreasureAmount:
+                    type: string
+        GetRollAppListReply:
+            type: object
+            properties:
+                count:
+                    type: string
+                totalTransactionCount:
+                    type: string
+                totalUpdateStateCount:
+                    type: string
+                list:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/RollAppInfo'
+        GetTransactionStatusReply:
+            type: object
+            properties:
+                txHash:
+                    type: string
+                status:
+                    type: boolean
+                message:
+                    type: string
+        GetTxCountReply:
+            type: object
+            properties:
+                totalTxCount:
+                    type: string
+                rollAppNums:
+                    type: string
+                rollAppTxCount:
+                    type: string
+                mlnNums:
+                    type: string
+                mlnTxCount:
+                    type: string
+        GoogleProtobufAny:
+            type: object
+            properties:
+                '@type':
+                    type: string
+                    description: The type of the serialized message.
+            additionalProperties: true
+            description: Contains an arbitrary serialized message along with a @type that describes the type of the serialized message.
+        GovAddress:
+            type: object
+            properties:
+                name:
+                    type: string
+                address:
+                    type: string
+                ugeaAmount:
+                    type: string
+        GovernanceAddress:
+            type: object
+            properties:
+                address:
+                    type: string
+                regionId:
+                    type: string
+                name:
+                    type: string
+        LockupDelegation:
+            type: object
+            properties:
+                id:
+                    type: string
+                regionId:
+                    type: string
+                amount:
+                    type: string
+                startTime:
+                    type: string
+                delegateEndTime:
+                    type: string
+                lockupInterestEndTime:
+                    type: string
+                delegateInterest:
+                    type: string
+                lockupInterest:
+                    type: string
+        LockupDetail:
+            type: object
+            properties:
+                AGEInterest:
+                    type: string
+                orderCreateTime:
+                    type: string
+                principalTerm:
+                    type: string
+                principalTermTime:
+                    type: string
+                interestTermTime:
+                    type: string
+        LockupWithdrawableAmountResponse:
+            type: object
+            properties:
+                lockupWithdrawableAmount:
+                    type: string
+        RegionDetailResponse:
+            type: object
+            properties:
+                regionId:
+                    type: string
+                totalMaxStake:
+                    type: string
+                totalStakeUgea:
+                    type: string
+                totalAns:
+                    type: string
+                currentKycAmount:
+                    type: string
+                totalDelegationInterestUgea:
+                    type: string
+                totalLockupInterestUgea:
+                    type: string
+                addressInfo:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/AddressInfo'
+                govAddress:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/GovAddress'
+                checkinTodayCount:
+                    type: string
+                totalLiquidity:
+                    type: string
+                delegationAddressCount:
+                    type: string
+                fixedAddressCount:
+                    type: string
+                lockUpAddressCount:
+                    type: string
+        RegionLiquidityData:
+            type: object
+            properties:
+                regionId:
+                    type: string
+                liquidity:
+                    type: string
+        RollAppInfo:
+            type: object
+            properties:
+                nodeNums:
+                    type: string
+                chainId:
+                    type: string
+                transactionCount:
+                    type: string
+                height:
+                    type: string
+                createTime:
+                    type: string
+                status:
+                    type: string
+                sequencers:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/SequencerInfo'
+        SendTransactionReply:
+            type: object
+            properties:
+                code:
+                    type: string
+                message:
+                    type: string
+                data:
+                    $ref: '#/components/schemas/TxRespData'
+        SendTransactionRequest:
+            type: object
+            properties:
+                rawData:
+                    type: string
+        SequencerInfo:
+            type: object
+            properties:
+                address:
+                    type: string
+                status:
+                    type: string
+                height:
+                    type: string
+                txHash:
+                    type: string
+        StakingInfo:
+            type: object
+            properties:
+                totalAge:
+                    type: string
+                totalAgs:
+                    type: string
+                totalAgd:
+                    type: string
+                totalAgr:
+                    type: string
+        Status:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    description: The status code, which should be an enum value of [google.rpc.Code][google.rpc.Code].
+                    format: int32
+                message:
+                    type: string
+                    description: A developer-facing error message, which should be in English. Any user-facing error message should be localized and sent in the [google.rpc.Status.details][google.rpc.Status.details] field, or localized by the client.
+                details:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/GoogleProtobufAny'
+                    description: A list of messages that carry the error details.  There is a common set of message types for APIs to use.
+            description: 'The `Status` type defines a logical error model that is suitable for different programming environments, including REST APIs and RPC APIs. It is used by [gRPC](https://github.com/grpc). Each `Status` message contains three pieces of data: error code, error message, and error details. You can find out more about this error model and how to work with it in the [API Design Guide](https://cloud.google.com/apis/design/errors).'
+        TxRespData:
+            type: object
+            properties:
+                txHash:
+                    type: string
+        UpdateGovernanceAddressRequest:
+            type: object
+            properties:
+                governanceAddress:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/GovernanceAddress'
+        UpdateGovernanceAddressResponse:
+            type: object
+            properties:
+                code:
+                    type: string
+                data:
+                    type: string
+                message:
+                    type: string
+        UpdateRegionRewardAddressReply:
+            type: object
+            properties: {}
+        UpdateRegionRewardAddressRequest:
+            type: object
+            properties:
+                regionId:
+                    type: string
+                address:
+                    type: string
+                queryType:
+                    type: string
+        WithdrawableDelegationReward:
+            type: object
+            properties:
+                regionId:
+                    type: string
+                withdrawableDelegationReward:
+                    type: string
+                withdrawableLockupReward:
+                    type: string
+                withdrawableFixedReward:
+                    type: string
+                withdrawableKycReward:
+                    type: string
+                totalWithdrawableReward:
+                    type: string
+tags:
+    - name: Account
+    - name: Address
+    - name: Bank
+    - name: Browser
+    - name: Delegation
+    - name: Home
+    - name: Region
+    - name: RegionAddress
+    - name: RollApp
+    - name: Tx
+    - name: Wallet

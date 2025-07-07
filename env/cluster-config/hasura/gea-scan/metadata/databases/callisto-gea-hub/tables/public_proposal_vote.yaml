@@ -1,0 +1,3 @@
+table:
+  name: proposal_vote
+  schema: public

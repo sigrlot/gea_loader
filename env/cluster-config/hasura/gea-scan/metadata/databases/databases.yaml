@@ -1,0 +1,39 @@
+- name: callisto-gea-hub
+  kind: postgres
+  configuration:
+    connection_info:
+      database_url: postgresql://pguser:pgpassword@postgres_gea_hub:5432/callisto-gea-hub
+      isolation_level: read-committed
+      use_prepared_statements: false
+  logical_models:
+    - fields:
+        - name: search_type
+          type:
+            nullable: true
+            scalar: text
+      name: key_exists_response
+    - fields:
+        - name: raw_log
+          type:
+            nullable: false
+            scalar: text
+      name: tx_raw_log
+  native_queries:
+    - arguments:
+        key:
+          description: ""
+          nullable: false
+          type: text
+      code: "SELECT \n  CASE \n    WHEN {{key}} ~ '^\\d+$' AND EXISTS (SELECT 1 FROM block b WHERE b.height = {{key}}::bigint) THEN 'block'\n    WHEN EXISTS (SELECT 1 FROM block b WHERE b.hash = {{key}}) THEN 'block'\n    WHEN EXISTS (SELECT 1 FROM \"transaction\" t WHERE t.hash = {{key}}) THEN 'hub_transaction'\n    WHEN EXISTS (SELECT 1 FROM rollapp_checkin.\"transaction\" t WHERE t.hash = {{key}}) THEN 'checkin_transaction'\n    WHEN EXISTS (SELECT 1 FROM module_accounts ma WHERE ma.address = {{key}}) THEN 'module_account'\n    WHEN EXISTS (SELECT 1 FROM account a WHERE a.address = {{key}}) THEN 'account'\n    ELSE NULL\n  END AS search_type\nLIMIT 1;"
+      returns: key_exists_response
+      root_field_name: existence_check
+    - arguments:
+        hash:
+          description: transaction hash
+          nullable: false
+          type: text
+      code: select t.raw_log from public."transaction" t where t.hash ={{hash}}
+      returns: tx_raw_log
+      root_field_name: get_tx_raw_logs
+  tables: "!include callisto-gea-hub/tables/tables.yaml"
+  functions: "!include callisto-gea-hub/functions/functions.yaml"

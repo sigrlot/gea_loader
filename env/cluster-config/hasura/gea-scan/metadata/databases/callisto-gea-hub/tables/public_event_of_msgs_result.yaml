@@ -1,0 +1,3 @@
+table:
+  name: event_of_msgs_result
+  schema: public

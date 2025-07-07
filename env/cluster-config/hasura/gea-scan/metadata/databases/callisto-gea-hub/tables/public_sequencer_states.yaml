@@ -1,0 +1,13 @@
+table:
+  name: sequencer_states
+  schema: public
+array_relationships:
+  - name: state_msgs
+    using:
+      manual_configuration:
+        column_mapping:
+          sequencer_address: creator
+        insertion_order: null
+        remote_table:
+          name: rollapp_state_msgs
+          schema: public

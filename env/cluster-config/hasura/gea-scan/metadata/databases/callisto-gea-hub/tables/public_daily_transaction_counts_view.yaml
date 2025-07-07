@@ -1,0 +1,3 @@
+table:
+  name: daily_transaction_counts_view
+  schema: public

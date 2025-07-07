@@ -1,0 +1,56 @@
+chain:
+  bech32_prefix: me
+  modules:
+    [
+      telemetry,
+      ibc,
+      transfer,
+      kyc,
+      auth,
+      ante,
+      bank,
+      checkin,
+      consensus,
+      "daily refetch",
+      distribution,
+      feegrant,
+      gov,
+      message_type,
+      messages,
+      modules,
+      staking,
+      upgrade,
+      raw_block,
+      authz,
+      anymsgs,
+    ]
+node:
+  type: remote
+  config:
+    rpc:
+      client_name: juno
+      address: http://118.175.0.248:46657
+      max_connections: 20
+    grpc:
+      address: 118.175.0.248:49090
+      insecure: true
+parsing:
+  workers: 1
+  start_height: 333860
+  average_block_time: 5s
+  listen_new_blocks: true
+  parse_old_blocks: true
+  parse_genesis: true
+database:
+#   url: postgresql://pguser:pgpassword@postgres_gea_hub:5432/callisto-gea-hub?sslmode=disable&search_path=rollapp_checkin
+  url: postgresql://pguser:pgpassword@192.168.0.100:5433/callisto-gea-hub?sslmode=disable&search_path=rollapp_checkin
+  max_open_connections: 10
+  max_idle_connections: 10
+  partition_size: 1000000
+  partition_batch: 1000
+logging:
+  level: info
+  format: text
+
+telemetry:
+  port: 4321

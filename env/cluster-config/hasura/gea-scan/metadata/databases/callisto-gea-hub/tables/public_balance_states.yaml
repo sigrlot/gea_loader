@@ -1,0 +1,22 @@
+table:
+  name: balance_states
+  schema: public
+object_relationships:
+  - name: did
+    using:
+      manual_configuration:
+        column_mapping:
+          address: address
+        insertion_order: null
+        remote_table:
+          name: dids
+          schema: public
+  - name: region_states
+    using:
+      manual_configuration:
+        column_mapping:
+          address: base_account
+        insertion_order: null
+        remote_table:
+          name: region_states
+          schema: public

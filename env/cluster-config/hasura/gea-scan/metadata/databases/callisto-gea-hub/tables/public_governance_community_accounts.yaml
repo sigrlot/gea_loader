@@ -1,0 +1,3 @@
+table:
+  name: governance_community_accounts
+  schema: public

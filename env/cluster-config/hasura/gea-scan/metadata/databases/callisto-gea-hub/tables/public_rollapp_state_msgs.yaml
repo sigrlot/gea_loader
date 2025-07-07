@@ -1,0 +1,22 @@
+table:
+  name: rollapp_state_msgs
+  schema: public
+object_relationships:
+  - name: sequencer
+    using:
+      manual_configuration:
+        column_mapping:
+          creator: sequencer_address
+        insertion_order: null
+        remote_table:
+          name: sequencer_states
+          schema: public
+  - name: transaction
+    using:
+      manual_configuration:
+        column_mapping:
+          tx_hash: hash
+        insertion_order: null
+        remote_table:
+          name: transaction
+          schema: public

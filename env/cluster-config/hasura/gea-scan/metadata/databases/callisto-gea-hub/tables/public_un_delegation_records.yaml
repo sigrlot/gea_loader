@@ -1,0 +1,3 @@
+table:
+  name: un_delegation_records
+  schema: public

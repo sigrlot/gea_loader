@@ -1,0 +1,45 @@
+
+# scan server
+server:
+  addr: 0.0.0.0:8000
+  timeout: 30s
+
+datasource:
+  redis:
+    master: ["redis://redis:6379/0"]
+    slave: ["redis://redis:6379/0"]
+
+  nodes:
+    maxConns: 1
+    targets: 
+      - address: "192.168.0.81"
+        grpc_port: "9190"
+        rpc_port: "1117"
+    http_proxy_prefix: "/api/nexus/node"
+
+  hasura:
+    target: "hasura:8080"
+  postgres:
+    host: "postgres_gea_hub"
+    port: "5432"
+    user: "pguser"
+    password: "pgpassword"
+    database: "callisto-gea-hub"
+    timeout: 30
+    maxOpenConns: 1
+    maxIdleConns: 3
+  rollapp:
+    chainId: ""
+    name: ""
+    targets:
+    -  address: "192.168.0.81"
+       grpc_port: "9790"
+       rpc_port: "1717"
+    http_proxy_prefix: "/api/nexus/rollapp"
+
+logger:
+  level: debug
+
+trace:
+  enable: true
+  jaeger_host: jaeger:4317

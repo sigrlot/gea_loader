@@ -1,0 +1,27 @@
+table:
+  name: check_in_record
+  schema: rollapp_checkin
+configuration:
+  column_config: {}
+  custom_column_names: {}
+  custom_name: check_in_record
+  custom_root_fields: {}
+object_relationships:
+  - name: block
+    using:
+      manual_configuration:
+        column_mapping:
+          height: height
+        insertion_order: null
+        remote_table:
+          name: block
+          schema: rollapp_checkin
+  - name: did
+    using:
+      manual_configuration:
+        column_mapping:
+          address: address
+        insertion_order: null
+        remote_table:
+          name: did_update_records
+          schema: rollapp_checkin

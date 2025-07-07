@@ -1,0 +1,3 @@
+table:
+  name: staking_address_count
+  schema: public

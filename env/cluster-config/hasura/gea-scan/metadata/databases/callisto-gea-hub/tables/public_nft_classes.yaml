@@ -1,0 +1,13 @@
+table:
+  name: nft_classes
+  schema: public
+object_relationships:
+  - name: count
+    using:
+      manual_configuration:
+        column_mapping:
+          id: id
+        insertion_order: null
+        remote_table:
+          name: nft_class_count
+          schema: public

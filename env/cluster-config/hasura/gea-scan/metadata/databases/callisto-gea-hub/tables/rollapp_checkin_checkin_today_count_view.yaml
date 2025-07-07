@@ -1,0 +1,8 @@
+table:
+  name: checkin_today_count_view
+  schema: rollapp_checkin
+configuration:
+  column_config: {}
+  custom_column_names: {}
+  custom_name: checkin_today_count
+  custom_root_fields: {}

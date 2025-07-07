@@ -1,0 +1,3 @@
+table:
+  name: mv_unique_account_last_active
+  schema: public

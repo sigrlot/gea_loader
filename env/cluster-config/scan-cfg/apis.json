@@ -1,0 +1,242 @@
+{
+    "metadata": {
+        "version": 125,
+        "restEndpoints": {
+            "account-module-transfers/:address": {
+                "methods": [
+                    "GET"
+                ],
+                "cacheSecond": "10"
+            },
+            "account-transfers/:address": {
+                "methods": [
+                    "GET"
+                ],
+                "cacheSecond": "10"
+            },
+            "account-tx/:address": {
+                "methods": [
+                    "GET"
+                ],
+                "cacheSecond": "10"
+            },
+            "address/governance/account": {
+                "methods": [
+                    "GET"
+                ],
+                "cacheSecond": "10"
+            },
+            "address/region/list": {
+                "methods": [
+                    "GET"
+                ],
+                "cacheSecond": "10"
+            },
+            "asset-change-log-in-tx": {
+                "methods": [
+                    "GET"
+                ],
+                "cacheSecond": "0"
+            },
+            "blockdetail": {
+                "methods": [
+                    "GET",
+                    "POST"
+                ],
+                "cacheSecond": "0"
+            },
+            "blocklist": {
+                "methods": [
+                    "GET"
+                ],
+                "cacheSecond": "5"
+            },
+            "checkin-count": {
+                "methods": [
+                    "POST"
+                ],
+                "cacheSecond": "10"
+            },
+            "daily/tx-list": {
+                "methods": [
+                    "GET"
+                ],
+                "cacheSecond": "10"
+            },
+            "get-all-nft-classes": {
+                "methods": [
+                    "GET"
+                ],
+                "cacheSecond": "10"
+            },
+            "get-all-nft-transactions": {
+                "methods": [
+                    "GET"
+                ],
+                "cacheSecond": "10"
+            },
+            "get-all-token-transactions": {
+                "methods": [
+                    "GET"
+                ],
+                "cacheSecond": "10"
+            },
+            "get-all-tokens": {
+                "methods": [
+                    "GET"
+                ],
+                "cacheSecond": "10"
+            },
+            "get-nft-class-detail": {
+                "methods": [
+                    "POST"
+                ],
+                "cacheSecond": "10"
+            },
+            "get-nft-detail": {
+                "methods": [
+                    "POST"
+                ],
+                "cacheSecond": "10"
+            },
+            "get-nft-holders-by-class-id": {
+                "methods": [
+                    "POST"
+                ],
+                "cacheSecond": "10"
+            },
+            "get-nft-transactions-by-address": {
+                "methods": [
+                    "POST"
+                ],
+                "cacheSecond": "10"
+            },
+            "get-nft-transactions-by-class-id": {
+                "methods": [
+                    "POST"
+                ],
+                "cacheSecond": "10"
+            },
+            "get-nft-transactions-by-nft-id": {
+                "methods": [
+                    "POST"
+                ],
+                "cacheSecond": "10"
+            },
+            "get-nfts-by-class-id": {
+                "methods": [
+                    "POST"
+                ],
+                "cacheSecond": "10"
+            },
+            "get-nfts-by-holder": {
+                "methods": [
+                    "POST"
+                ],
+                "cacheSecond": "10"
+            },
+            "get-token-detail": {
+                "methods": [
+                    "POST"
+                ],
+                "cacheSecond": "10"
+            },
+            "get-transactions-by-token-name": {
+                "methods": [
+                    "POST"
+                ],
+                "cacheSecond": "10"
+            },
+            "kyc/cancel/info": {
+                "methods": [
+                    "GET"
+                ],
+                "cacheSecond": "10"
+            },
+            "node-blocks": {
+                "methods": [
+                    "GET"
+                ],
+                "cacheSecond": "10"
+            },
+            "region/liquidity": {
+                "methods": [
+                    "GET"
+                ],
+                "cacheSecond": "10"
+            },
+            "rollapp-state/:rollappID": {
+                "methods": [
+                    "GET"
+                ],
+                "cacheSecond": "10"
+            },
+            "rollapp/detail": {
+                "methods": [
+                    "GET"
+                ],
+                "cacheSecond": "10"
+            },
+            "rollapp/update-states": {
+                "methods": [
+                    "GET"
+                ],
+                "cacheSecond": "10"
+            },
+            "rollapp/update-states/:rollapp_id": {
+                "methods": [
+                    "GET"
+                ],
+                "cacheSecond": "10"
+            },
+            "rollapplist": {
+                "methods": [
+                    "GET"
+                ],
+                "cacheSecond": "10"
+            },
+            "sequencers": {
+                "methods": [
+                    "GET"
+                ],
+                "cacheSecond": "10"
+            },
+            "staking-trends": {
+                "methods": [
+                    "POST"
+                ],
+                "cacheSecond": "10"
+            },
+            "tx-info": {
+                "methods": [
+                    "GET"
+                ],
+                "cacheSecond": "10"
+            },
+            "tx/:hash": {
+                "methods": [
+                    "GET"
+                ],
+                "cacheSecond": "0"
+            },
+            "txlist": {
+                "methods": [
+                    "GET"
+                ],
+                "cacheSecond": "10"
+            },
+            "unbond": {
+                "methods": [
+                    "POST"
+                ],
+                "cacheSecond": "10"
+            },
+            "validator_counts": {
+                "methods": [
+                    "GET"
+                ],
+                "cacheSecond": "10"
+            }
+        }
+    }
+}

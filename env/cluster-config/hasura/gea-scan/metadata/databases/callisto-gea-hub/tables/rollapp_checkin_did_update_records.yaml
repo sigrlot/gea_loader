@@ -1,0 +1,13 @@
+table:
+  name: did_update_records
+  schema: rollapp_checkin
+object_relationships:
+  - name: kyc
+    using:
+      manual_configuration:
+        column_mapping:
+          d_id: did
+        insertion_order: null
+        remote_table:
+          name: dids
+          schema: public

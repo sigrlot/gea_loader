@@ -1,0 +1,22 @@
+- name: callisto
+  kind: postgres
+  configuration:
+    connection_info:
+      database_url:
+        connection_parameters:
+          database: callisto
+          host: 192.168.0.190
+          password: postgres
+          port: 5632
+          username: postgres
+      isolation_level: read-committed
+      use_prepared_statements: false
+  tables: "!include callisto/tables/tables.yaml"
+- name: callisto3
+  kind: postgres
+  configuration:
+    connection_info:
+      database_url: postgresql://postgres:postgres@192.168.0.190:5532/callisto3
+      isolation_level: read-committed
+      use_prepared_statements: false
+  tables: "!include callisto3/tables/tables.yaml"
